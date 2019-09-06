@@ -1,5 +1,16 @@
-# import sys
+import sys
 import os
+
+args = sys.argv
+help = f"""HELP: brIW helps you collect drinks rounds. To start, just enter
+    python3 {args[0]}
+"""
+if len(args) > 1:
+    if args[1] == "-h":
+        print(help)
+    else:
+        print("No arguments needed for this program (yet!). For help use -h.")
+    exit()
 
 menu = """
 ============== MENU ==============
