@@ -1,7 +1,6 @@
 import sys
 import os
 
-stop = False
 commands = """
 Please enter a number to select a command:
 
@@ -12,6 +11,34 @@ Please enter a number to select a command:
     [5] Exit
 """
 welcome = "Welcome to BrIW v0.1!"
+people_file = "./people.txt"
+drinks_file = "./drinks.txt"
+
+def ask_to_continue(message):
+    while True:
+        print(f"{message} \nContinue anyway? (y/n)")
+        choice = input().lower()
+        if choice == "y":
+            break
+        elif choice == "n":
+            exit()
+        else:
+            print("Unrecognised input. ")
+
+
+def read_list_file(file_name):
+    assert file_name != "", "No file supplied."
+
+    items = []
+    with open(file_name,"rt",newline="\n") as file:
+        for line in file:
+            if line[:-1] != "":
+                items.append(line[:-1])
+
+    if len(items) == 0:
+        ask_to_continue(f"Empty file supplied: {file_name}")
+
+    return items
 
 def calculate_width(rows):
     longest_item = 0
@@ -35,13 +62,18 @@ def print_as_table(header, rows):
     text += table_break
     print(text)
 
-people = ["Scooby Dooooooooooooooooooo", "Shaggy", "Fred", "Daphne", "Velma"]
-drinks = ["coffee", "tea", "lemonade"]
+# people = ["Scooby Dooooooooooooooooooo", "Shaggy", "Fred", "Daphne", "Velma"]
+# drinks = ["coffee", "tea", "lemonade"]
+
+people = read_list_file(people_file)
+start_num_of_people = len(people)
+drinks = read_list_file(drinks_file)
+start_num_of_drinks = len(drinks)
 
 os.system("clear")
 print(welcome)
 
-while not stop:
+while True:
     print(commands)
     command = input()
     os.system("clear")
