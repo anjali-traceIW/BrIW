@@ -25,6 +25,8 @@ def ask_to_continue(message):
         else:
             print("Unrecognised input. ")
 
+# def update_list_file(people_file, people):
+
 
 def read_list_file(file_name):
     assert file_name != "", "No file supplied."
@@ -34,7 +36,7 @@ def read_list_file(file_name):
         for line in file:
             if line[:-1] != "":
                 items.append(line[:-1])
-
+    
     if len(items) == 0:
         ask_to_continue(f"Empty file supplied: {file_name}")
 
@@ -85,17 +87,23 @@ while True:
         print_as_table("Drinks", drinks)
     elif  command == "3":
         print("Please enter a name to add: ")
-        name = input()
-        people.append(name)
-        os.system("clear")
-        print(f"{name} successfully added to people.")
+        while True:
+            name = input()
+            if name == "":
+                break
+            people.append(name)
+            os.system("clear")
+            print(f"{name} successfully added to people. Enter another or hit enter when done.")
     elif command == "4":
         print("Please enter a drink to add: ")
-        drink = input()
-        os.system("clear")
-        drinks.append(drink)
-        print(f"{drink} successfully added to drinks.")
+        while True:
+            drink = input()
+            if drink == "":
+                break
+            os.system("clear")
+            drinks.append(drink)
+            print(f"{drink} successfully added to drinks. Enter another name or hit enter when done.")
     elif command == "5":
-        exit()
+        break
     else: 
         print("Unrecognised command. ")
