@@ -1,8 +1,8 @@
-import sys
+# import sys
 import os
 
-commands = """
-Please enter a number to select a command:
+menu = """
+============== MENU ==============
 
     [1] Get all people
     [2] Get all drinks
@@ -26,7 +26,8 @@ def ask_to_continue(message):
         else:
             print("Unrecognised input. ")
 
-# def update_list_file(people_file, people):
+def update_list_file(list_file, updated_list):
+    pass
 
 
 def read_list_file(file_name):
@@ -76,7 +77,7 @@ def take_list_input(list_to_update):
         else: 
             list_to_update.append(item)
             os.system("clear")
-            print(f"{item} successfully added. \nEnter another or hit enter when done.")
+            print(f"{item} successfully added. Enter another or hit ENTER to return to menu.")
     os.system("clear")
     return list_to_update
 
@@ -92,15 +93,17 @@ os.system("clear")
 print(welcome)
 
 while True:
-    print(commands)
-    command = input()
+    print(menu)
+    command = input("Enter a number to select a command: ")
     os.system("clear")
     if len(command) == 0:
         print("Expected input, none provided. ")
     elif command == "1":
         print_as_table("People", people)
+        input("Hit ENTER to return to menu.")
     elif command == "2":
         print_as_table("Drinks", drinks)
+        input("Hit ENTER to return to menu.")
     elif  command == "3":
         print("Please enter a name to add. Hit enter when done to add another. ")
         people = take_list_input(people)
@@ -111,3 +114,7 @@ while True:
         break
     else: 
         print("Unrecognised command. ")
+    os.system("clear")
+
+if len(people) != start_num_of_people:
+    update_list_file(people_file, people)
