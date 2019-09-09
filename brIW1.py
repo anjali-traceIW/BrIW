@@ -47,6 +47,11 @@ def update_list_file(list_file, updated_list):
         for item in updated_list:
             file.write(f"{item}\n")
 
+def update_dict_file(dict_file, updated_dict):
+    with open(dict_file,"w") as file:
+        for key in updated_dict:
+            file.write(f"{key}:{updated_dict[key]}\n")
+
 def read_list_file(file_name):
     assert file_name != "", "No file supplied."
 
@@ -127,7 +132,7 @@ def print_preferences(preferences):
 def take_list_input(list_to_update):
     updated = False
     while True:
-        item = input()
+        item = input().strip()
         if item == "":
             break
 
@@ -230,4 +235,4 @@ if updated_people:
 if updated_drinks:
     update_list_file(drinks_file, drinks)
 if updated_preferences:
-    update_list_file(preferences_file, preferences)
+    update_dict_file(preferences_file, preferences)
