@@ -66,12 +66,16 @@ def read_list_file(file_name):
 
     return items
 
-def read_dict_file(file_name):
+def read_dict_integer_file(file_name):
+    # Expects integer key and value pair
     lines = read_list_file(file_name)
     new_dict = {}
     for line in lines:
         key, value = line.split(":")
-        new_dict[key] = value
+        if value == "":
+            new_dict[int(key)] = ""
+        else:
+            new_dict[int(key)] = int(value)
     return new_dict
 
 def get_person_id(name):
@@ -125,7 +129,10 @@ def print_preferences(preferences):
     rows = []
     for name_id in preferences:
         name = get_person_from_id(name_id)
-        drink = get_drink_from_id(preferences[name_id])
+        if preferences[name_id] != "":
+            drink = get_drink_from_id(preferences[name_id])
+        else:
+            drink = ""
         rows.append("{}{} | {}{}".format(name, " "*(names_width-len(name)-1), drink, " "*(drinks_width-len(drink)-1)))
     return _print_as_table(header, rows, calculate_column_width(rows), False)
 
@@ -152,10 +159,10 @@ start_num_of_people = len(people)
 drinks = read_list_file(drinks_file)
 start_num_of_drinks = len(drinks)
 
-preferences = {}
-for index in range(len(people)):
-    # Assign a random favourite drink for now
-    preferences[index] = random.randint(0,len(drinks)-1)
+preferences = read_dict_integer_file(preferences_file)
+# for index in range(len(people)):
+#     # Assign a random favourite drink for now
+#     preferences[index] = random.randint(0,len(drinks)-1)
 
 updated_people, updated_drinks, updated_preferences = False, False, False
 
