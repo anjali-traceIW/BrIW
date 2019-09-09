@@ -105,7 +105,6 @@ def print_preferences(preferences):
     names_width = calculate_column_width(people)-6
     drinks_width = calculate_column_width(drinks)-6
     header = "Person{} | Fav Drink {}".format(" "*(names_width-7), " "*(drinks_width-11))
-    # header = make_row(" ", "Name", names_width)[-2] + make_row(" ", "Fav drink", drinks_width)
     rows = []
     for name_id in preferences:
         name = get_person_from_id(name_id)
@@ -117,7 +116,7 @@ def take_list_input(list_to_update):
     while True:
         item = input()
         if item == "":
-            break
+            continue
 
         if len(item) > max_table_width-6:
             print(f"Item not added - cannot be more than {max_table_width-6} characters. Try again.")
@@ -173,14 +172,26 @@ while True:
 
     elif command == "6":
         print(print_1column_table("People", people))
-        print("To set a favourite drink, enter the id of a person.")
+        print("To set a favourite drink, enter the ID of a person.")
+        try:
         name_id = int(input("Enter an id: "))
         assert name_id in range(1,len(people)+1)
+        except:
+            print(f"ID {name_id} not recognised. Hit ENTER to return to menu.")
+            input()
+            os.system("clear")
+            continue
         
         print(print_1column_table("Drinks", drinks))
         print("Now enter the id of the favourite drink.")
+        try:
         drink_id = int(input("Enter an id: "))
         assert drink_id in range(1,len(drinks)+1)
+        except:
+            print(f"ID {drink_id} not recognised. Hit ENTER to return to menu.")
+            input()
+            os.system("clear")
+            continue
 
         set_preference(name_id, drink_id)
         os.system("clear")
