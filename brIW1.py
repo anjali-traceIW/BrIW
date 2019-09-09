@@ -27,6 +27,7 @@ menu = """
 welcome = "Welcome to BrIW v0.1!"
 people_file = "./people.txt"
 drinks_file = "./drinks.txt"
+preferences_file = "./preferences.txt"
 max_table_width = 90
 
 def ask_to_continue(message):
@@ -41,7 +42,10 @@ def ask_to_continue(message):
             print("Unrecognised input. ")
 
 def update_list_file(list_file, updated_list):
-    pass
+    # Overwrites whole file (TODO: not this)
+    with open(list_file,"w") as file:
+        for item in updated_list:
+            file.write(f"{item}\n")
 
 def read_list_file(file_name):
     assert file_name != "", "No file supplied."
@@ -56,6 +60,14 @@ def read_list_file(file_name):
         ask_to_continue(f"Empty file supplied: {file_name}")
 
     return items
+
+def read_dict_file(file_name):
+    lines = read_list_file(file_name)
+    new_dict = {}
+    for line in lines:
+        key, value = line.split(":")
+        new_dict[key] = value
+    return new_dict
 
 def get_person_id(name):
     return people.index(name)+1
@@ -113,25 +125,25 @@ def print_preferences(preferences):
     return _print_as_table(header, rows, calculate_column_width(rows), False)
 
 def take_list_input(list_to_update):
+    updated = False
     while True:
         item = input()
         if item == "":
-            continue
+            break
 
         if len(item) > max_table_width-6:
             print(f"Item not added - cannot be more than {max_table_width-6} characters. Try again.")
         else: 
             list_to_update.append(item.capitalize())
+            updated = True
             os.system("clear")
             print(f"{item} successfully added. Enter another or hit ENTER to return to menu.")
     os.system("clear")
-    return list_to_update
-
-# people = ["Scooby Dooooooooooooooooooo", "Shaggy", "Fred", "Daphne", "Velma"]
-# drinks = ["coffee", "tea", "lemonade"]
+    return list_to_update, updated
 
 people = read_list_file(people_file)
 start_num_of_people = len(people)
+
 drinks = read_list_file(drinks_file)
 start_num_of_drinks = len(drinks)
 
@@ -139,6 +151,8 @@ preferences = {}
 for index in range(len(people)):
     # Assign a random favourite drink for now
     preferences[index] = random.randint(0,len(drinks)-1)
+
+updated_people, updated_drinks, updated_preferences = False, False, False
 
 os.system("clear")
 print(welcome)
@@ -160,11 +174,15 @@ while True:
 
     elif command == "3":
         print("Please enter a name to add. Hit enter when done to add another. ")
-        people = take_list_input(people)
+        people, success = take_list_input(people)
+        if success:
+            updated_people = True
 
     elif command == "4":
         print("Please enter a drink to add: ")
-        drinks = take_list_input(drinks)
+        drinks, success = take_list_input(drinks)
+        if success:
+            updated_drinks = True
 
     elif command == "5":
         print(print_preferences(preferences))
@@ -174,19 +192,19 @@ while True:
         print(print_1column_table("People", people))
         print("To set a favourite drink, enter the ID of a person.")
         try:
-        name_id = int(input("Enter an id: "))
-        assert name_id in range(1,len(people)+1)
+            name_id = int(input("Enter an id: "))
+            assert name_id in range(1,len(people)+1)
         except:
             print(f"ID {name_id} not recognised. Hit ENTER to return to menu.")
             input()
             os.system("clear")
             continue
-        
+
         print(print_1column_table("Drinks", drinks))
         print("Now enter the id of the favourite drink.")
         try:
-        drink_id = int(input("Enter an id: "))
-        assert drink_id in range(1,len(drinks)+1)
+            drink_id = int(input("Enter an id: "))
+            assert drink_id in range(1,len(drinks)+1)
         except:
             print(f"ID {drink_id} not recognised. Hit ENTER to return to menu.")
             input()
@@ -194,6 +212,8 @@ while True:
             continue
 
         set_preference(name_id, drink_id)
+        updated_preferences = True
+
         os.system("clear")
         print(f"{get_person_from_id(name_id)}'s favourite drink is now {get_drink_from_id(drink_id)}.\n")
         input("Hit ENTER to return to menu.")
@@ -205,5 +225,9 @@ while True:
         print("Unrecognised command. ")
     os.system("clear")
 
-if len(people) != start_num_of_people:
+if updated_people:
     update_list_file(people_file, people)
+if updated_drinks:
+    update_list_file(drinks_file, drinks)
+if updated_preferences:
+    update_list_file(preferences_file, preferences)
