@@ -175,9 +175,13 @@ while True:
         print(print_1column_table("People", people))
         print("To set a favourite drink, enter the id of a person.")
         name_id = int(input("Enter an id: "))
+        assert name_id in range(1,len(people)+1)
+        
         print(print_1column_table("Drinks", drinks))
         print("Now enter the id of the favourite drink.")
         drink_id = int(input("Enter an id: "))
+        assert drink_id in range(1,len(drinks)+1)
+
         set_preference(name_id, drink_id)
         os.system("clear")
         print(f"{get_person_from_id(name_id)}'s favourite drink is now {get_drink_from_id(drink_id)}.\n")
