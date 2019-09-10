@@ -14,15 +14,21 @@ if len(args) > 1:
     exit()
 
 menu = """
-============== MENU ==============
+============== MENU ==============            {
+                                           {   }
+    [1] Get all people                      }_{ __{
+    [2] Get all drinks                   .-{   }   }-.
+    [3] Add people                      (   }     {   )
+    [4] Add drinks                      |`-.._____..-'|
+    [5] Get favourite drinks            |             ;--.
+    [6] Set favourite drinks            |            (__  \\
+    [E] Save & Exit                     |             | )  )
+                                        |             |/  /
+                                        |             /  / 
+                                        |            (  /
+                                        \             y'
+                                         `-.._____..-'
 
-    [1] Get all people
-    [2] Get all drinks
-    [3] Add people
-    [4] Add drinks
-    [5] Get favourite drinks
-    [6] Set favourite drinks
-    [E] Save & Exit
 """
 welcome = "Welcome to BrIW v0.1!"
 people_file = "./people.txt"
@@ -175,6 +181,7 @@ while True:
     os.system("clear")
     if len(command) == 0:
         print("Expected input, none provided. ")
+        input("Hit ENTER to return to menu.")
 
     elif command == "1":
         print(print_1column_table("People", people))
@@ -203,8 +210,11 @@ while True:
     elif command == "6":
         print(print_1column_table("People", people))
         print("To set a favourite drink, enter the ID of a person.")
+        name_id = input("Enter an ID: ")
+        if name_id == "":
+            continue
         try:
-            name_id = int(input("Enter an id: "))
+            name_id = int(name_id)
             assert name_id in range(1,len(people)+1)
         except:
             print(f"ID {name_id} not recognised. Hit ENTER to return to menu.")
@@ -213,9 +223,12 @@ while True:
             continue
 
         print(print_1column_table("Drinks", drinks))
-        print("Now enter the id of the favourite drink.")
+        print("Now enter the ID of the favourite drink.")
+        drink_id = input("Enter an ID: ")
+        if drink_id == "":
+            continue
         try:
-            drink_id = int(input("Enter an id: "))
+            drink_id = int(drink_id)
             assert drink_id in range(1,len(drinks)+1)
         except:
             print(f"ID {drink_id} not recognised. Hit ENTER to return to menu.")
