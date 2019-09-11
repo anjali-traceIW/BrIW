@@ -10,7 +10,7 @@ if len(args) > 1:
     if args[1] == "-h":
         print(help)
     else:
-        print("No arguments needed for this program (yet!). For help use -h.")
+        print("Argument not recognised. For help use -h.")
     exit()
 
 menu = """
@@ -142,18 +142,20 @@ def print_preferences(preferences):
         rows.append("{}{} | {}{}".format(name, " "*(names_width-len(name)-1), drink, " "*(drinks_width-len(drink)-1)))
     return _print_as_table(header, rows, calculate_column_width(rows), False)
 
-def take_list_input(list_to_update):
+def take_list_input(list_to_update, update_preferences=False):
     updated = False
     while True:
-        item = input().strip()
+        item = input().strip().capitalize()
         if item == "":
             break
 
         if len(item) > max_table_width-6:
             print(f"Item not added - cannot be more than {max_table_width-6} characters. Try again.")
         else: 
-            list_to_update.append(item.capitalize())
+            list_to_update.append(item)
             updated = True
+            if update_preferences:
+                set_preference(item, "")
             os.system("clear")
             print(f"{item} successfully added. Enter another or hit ENTER to return to menu.")
     os.system("clear")
