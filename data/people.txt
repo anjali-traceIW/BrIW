@@ -3,4 +3,3 @@ Shaggy
 Fred
 Daphne
 Velma
-Jojo

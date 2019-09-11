@@ -31,9 +31,9 @@ menu = """
 
 """
 welcome = "Welcome to BrIW v0.1!"
-people_file = "./people.txt"
-drinks_file = "./drinks.txt"
-preferences_file = "./preferences.txt"
+people_file = "data/people.txt"
+drinks_file = "data/drinks.txt"
+preferences_file = "data/preferences.txt"
 max_table_width = 90
 
 def ask_to_continue(message):
