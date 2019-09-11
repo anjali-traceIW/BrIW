@@ -36,6 +36,27 @@ drinks_file = "data/drinks.txt"
 preferences_file = "data/preferences.txt"
 max_table_width = 90
 
+class Round:
+    def __init__(self, owner):
+        self.owner=owner
+        self.orders = {}
+
+    def add_order(self, person, drink):
+        self.orders[person] = drink
+
+    def print_orders(self):
+        return print_people_drinks(orders, ("Name", "Drink"))
+
+class Person:
+    def __init__(self, name, fav_drink=""):
+        self.name = name
+        self.favourite_drink = fav_drink
+
+class Drink:
+    def __init__(self, name, temp):
+        self.name = name
+        self.temperature = temp
+
 def ask_to_continue(message):
     while True:
         print(f"{message} \nContinue anyway? (y/n)")
@@ -128,10 +149,10 @@ def _print_as_table(header, rows, table_width, use_index):
 def print_1column_table(header, rows):
     return _print_as_table(header, rows, calculate_column_width(rows), True)
 
-def print_preferences(preferences):
+def print_people_drinks(preferences, headers=("Person", "Fav Drink")):
     names_width = calculate_column_width(people)-6
     drinks_width = calculate_column_width(drinks)-6
-    header = "Person{} | Fav Drink {}".format(" "*(names_width-7), " "*(drinks_width-11))
+    header = "{}{} | {} {}".format(header[0], " "*(names_width-len(header[0])), header[1], " "*(drinks_width-len(header[1])))
     rows = []
     for name_id in preferences:
         name = get_person_from_id(name_id)
@@ -168,9 +189,6 @@ drinks = read_list_file(drinks_file)
 start_num_of_drinks = len(drinks)
 
 preferences = read_dict_integer_file(preferences_file)
-# for index in range(len(people)):
-#     # Assign a random favourite drink for now
-#     preferences[index] = random.randint(0,len(drinks)-1)
 
 updated_people, updated_drinks, updated_preferences = False, False, False
 
@@ -206,7 +224,7 @@ while True:
             updated_drinks = True
 
     elif command == "5":
-        print(print_preferences(preferences))
+        print(print_people_drinks(preferences))
         input("Hit ENTER to return to menu.")
 
     elif command == "6":

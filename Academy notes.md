@@ -128,3 +128,7 @@ $HISTSIZE how many commands do you want the command history to remember?
 
 `export EDITOR=vim`
 
+`env` to see all environment variables.
+
+## OOP
+
