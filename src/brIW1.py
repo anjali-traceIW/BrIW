@@ -1,6 +1,7 @@
 import sys
 import os
 import random
+from src.cls import Round, Person, Drink
 
 args = sys.argv
 help = f"""HELP: brIW helps you collect drinks rounds. To start, just enter
@@ -35,27 +36,6 @@ people_file = "data/people.txt"
 drinks_file = "data/drinks.txt"
 preferences_file = "data/preferences.txt"
 max_table_width = 90
-
-class Round:
-    def __init__(self, owner):
-        self.owner=owner
-        self.orders = {}
-
-    def add_order(self, person, drink):
-        self.orders[person] = drink
-
-    def print_orders(self):
-        return print_people_drinks(orders, ("Name", "Drink"))
-
-class Person:
-    def __init__(self, name, fav_drink=""):
-        self.name = name
-        self.favourite_drink = fav_drink
-
-class Drink:
-    def __init__(self, name, temp):
-        self.name = name
-        self.temperature = temp
 
 def ask_to_continue(message):
     while True:
@@ -146,7 +126,7 @@ def _print_as_table(header, rows, table_width, use_index):
     text += make_table_break(table_width)
     return text
 
-def print_1column_table(header, rows):
+def print_single_column_table(header, rows):
     return _print_as_table(header, rows, calculate_column_width(rows), True)
 
 def print_people_drinks(preferences, headers=("Person", "Fav Drink")):
@@ -204,11 +184,11 @@ while True:
         input("Hit ENTER to return to menu.")
 
     elif command == "1":
-        print(print_1column_table("People", people))
+        print(print_single_column_table("People", people))
         input("Hit ENTER to return to menu.")
 
     elif command == "2":
-        print(print_1column_table("Drinks", drinks))
+        print(print_single_column_table("Drinks", drinks))
         input("Hit ENTER to return to menu.")
 
     elif command == "3":
@@ -228,7 +208,7 @@ while True:
         input("Hit ENTER to return to menu.")
 
     elif command == "6":
-        print(print_1column_table("People", people))
+        print(print_single_column_table("People", people))
         print("To set a favourite drink, enter the ID of a person.")
         name_id = input("Enter an ID: ")
         if name_id == "":
@@ -242,7 +222,7 @@ while True:
             os.system("clear")
             continue
 
-        print(print_1column_table("Drinks", drinks))
+        print(print_single_column_table("Drinks", drinks))
         print("Now enter the ID of the favourite drink.")
         drink_id = input("Enter an ID: ")
         if drink_id == "":
