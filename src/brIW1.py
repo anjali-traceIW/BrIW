@@ -152,13 +152,13 @@ def take_list_input(list_to_update, update_preferences=False):
     os.system("clear")
     return list_to_update, updated
 
-people = read_list_file(people_file)
-start_num_of_people = len(people)
+people_file = FileManager.PeopleFileManager(people_file)
+people = people_file.get_people_from_file()
 
-drinks = read_list_file(drinks_file)
-start_num_of_drinks = len(drinks)
+drinks_file = FileManager.DrinksFileManager(drinks_file)
+drinks = drinks_file.get_drinks_from_file()
 
-preferences = read_dict_integer_file(preferences_file)
+# preferences = read_dict_integer_file(preferences_file)
 
 updated_people, updated_drinks, updated_preferences = False, False, False
 
@@ -194,32 +194,34 @@ while True:
             updated_drinks = True
 
     elif command == "5":
-        print(print_people_drinks(preferences))
+        print(table_maker.print_people_drinks(people))
         input("Hit ENTER to return to menu.")
 
     elif command == "6":
-        print(print_single_column_table("People", people))
+        names, drink_names = table_maker.extract_people_and_drinks(people)
+        print(table_maker.print_single_column_table("People", names))
         print("To set a favourite drink, enter the ID of a person.")
         name_id = input("Enter an ID: ")
         if name_id == "":
             continue
         try:
             name_id = int(name_id)
-            assert name_id in range(1,len(people)+1)
+            assert name_id in range(1,len(names)+1)
         except:
             print(f"ID {name_id} not recognised. Hit ENTER to return to menu.")
             input()
             os.system("clear")
             continue
 
-        print(print_single_column_table("Drinks", drinks))
+        drink_names = table_maker.extract_drinks_names(drinks)
+        print(table_maker.print_single_column_table("Drinks", drink_names))
         print("Now enter the ID of the favourite drink.")
         drink_id = input("Enter an ID: ")
         if drink_id == "":
             continue
         try:
             drink_id = int(drink_id)
-            assert drink_id in range(1,len(drinks)+1)
+            assert drink_id in range(1,len(drink_names)+1)
         except:
             print(f"ID {drink_id} not recognised. Hit ENTER to return to menu.")
             input()

@@ -1,9 +1,5 @@
 def calculate_column_width(rows):
-    longest_item = 0
-    for item in rows:
-        if len(item) > longest_item:
-            longest_item = len(item)
-    
+    longest_item = len(max(rows, key=len))
     if longest_item+6 > 20:
         return longest_item+6
     return 20
@@ -27,16 +23,28 @@ def _print_as_table(header, rows, table_width, use_index):
 def print_single_column_table(header, rows):
     return _print_as_table(header, rows, calculate_column_width(rows), True)
 
-def print_people_drinks(preferences, headers=("Person", "Fav Drink")):
+def extract_people_and_drinks(people):
+    list_of_people =[]
+    list_of_drinks=[]
+    for person in people:
+        list_of_people.append(person.name)
+        list_of_drinks.append(person.favourite_drink.name)
+    return list_of_people, list_of_drinks
+    
+def extract_drinks_names(drinks):
+    list_of_drinks=[]
+    for drink in drinks:
+        list_of_drinks.append(drink.name)
+    return  list_of_drinks
+
+def print_people_drinks(people_data, headers=("Person", "Fav Drink")):
+    people, drinks = extract_people_and_drinks(people_data)
     names_width = calculate_column_width(people)-6
     drinks_width = calculate_column_width(drinks)-6
     header = "{}{} | {} {}".format(headers[0], " "*(names_width-1-len(headers[0])), headers[1], " "*(drinks_width-len(headers[1])))
     rows = []
-    for name_id in preferences:
-        name = get_person_from_id(name_id)
-        if preferences[name_id] != "":
-            drink = get_drink_from_id(preferences[name_id])
-        else:
-            drink = ""
+    for person in people_data:
+        name = person.name
+        drink = person.favourite_drink.name
         rows.append("{}{} | {}{}".format(name, " "*(names_width-len(name)-1), drink, " "*(drinks_width-len(drink)-1)))
     return _print_as_table(header, rows, calculate_column_width(rows), False)

@@ -1,10 +1,12 @@
 import helper
-from cls import Person, Drink
+#from cls import Person, Drink
+from cls.Person import Person
+from cls.Drink import Drink
 
 class FileManager:
 
     def __init__(self, file_path):
-        assert self.file_path != "", "No file supplied."
+        assert file_path != "", "No file supplied."
         self.file_path = file_path
 
     def read_file(self):
@@ -39,7 +41,8 @@ class PeopleFileManager(FileManager):
         people = []
         rows = FileManager.read_file(self)
         for row in rows:
-            people.append(Person(row[0], Drink(row[1])))
+            new_row = [x.strip() for x in row.split(',')]
+            people.append(Person(new_row[0], Drink(new_row[1])))
         self.start_no_of_people = len(people)
         return people
 
