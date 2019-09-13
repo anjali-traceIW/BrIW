@@ -64,9 +64,14 @@ def take_list_input(list_to_update, update_preferences=False):
             print(f"Item not added - cannot be more than {max_table_width-6} characters. Try again.")
         else: 
             if update_preferences:
-                list_to_update.append(Person(item, Drink("")))
+                try:
+                    list_to_update.add_person(Person(item, Drink("")))
+                except Exception as e:
+                    print(str(e))
+                    print("\nHit ENTER to return to menu")
+                    break
             else: 
-                list_to_update.append(Drink(item))
+                list_to_update.add_drink(Drink(item))
             updated = True
             os.system("clear")
             print(f"{item} successfully added. Enter another or hit ENTER to return to menu.")
