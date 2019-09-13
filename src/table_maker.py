@@ -26,14 +26,14 @@ def print_single_column_table(header, rows):
 def extract_people_and_drinks(people):
     list_of_people =[]
     list_of_drinks=[]
-    for person in people:
+    for person in people.all_people.values():
         list_of_people.append(person.name)
         list_of_drinks.append(person.favourite_drink.name)
     return list_of_people, list_of_drinks
-    
+
 def extract_drinks_names(drinks):
     list_of_drinks=[]
-    for drink in drinks:
+    for drink in drinks.all_drinks:
         list_of_drinks.append(drink.name)
     return  list_of_drinks
 

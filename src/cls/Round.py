@@ -8,4 +8,9 @@ class Round:
         self.orders[person] = drink
 
     def print_orders(self):
-        return print_people_drinks(orders, ("Name", "Drink"))
+
+    def get_people(self):
+        return orders.keys()
+
+    def get_drinks(self):
+        return orders.values()

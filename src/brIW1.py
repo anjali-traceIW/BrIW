@@ -93,13 +93,11 @@ while True:
         input("Hit ENTER to return to menu.")
 
     elif command == "1":
-        names, drink_names = table_maker.extract_people_and_drinks(people)
-        print(table_maker.print_single_column_table("People", names))
+        print(table_maker.print_single_column_table("People", people.get_names()))
         input("Hit ENTER to return to menu.")
 
     elif command == "2":
-        drink_names = table_maker.extract_drinks_names(drinks)
-        print(table_maker.print_single_column_table("Drinks", drink_names))
+        print(table_maker.print_single_column_table("Drinks", drinks.get_names()))
         input("Hit ENTER to return to menu.")
 
     elif command == "3":
@@ -119,38 +117,34 @@ while True:
         input("Hit ENTER to return to menu.")
 
     elif command == "6":
-        names, drink_names = table_maker.extract_people_and_drinks(people)
-        print(table_maker.print_single_column_table("People", names))
+        print(table_maker.print_single_column_table("People", people.get_names()))
         print("To set a favourite drink, enter the name of a person.")
-        name_id = input("Enter an ID: ")
-        if name_id == "":
+        name = input("Enter a name: ")
+        if name == "":
             continue
-        try:
-            name_id = int(name_id)
-            assert name_id in range(1,len(names)+1)
-        except:
-            print(f"ID {name_id} not recognised. Hit ENTER to return to menu.")
-            input()
+        elif not people.check_person_exists(name):
+            print(f"Person {name} not recognised.")
+            input("Hit ENTER to return to menu: ")
             os.system("clear")
             continue
+        person = people.get_person(name)
 
-        drink_names = table_maker.extract_drinks_names(drinks)
-        print(table_maker.print_single_column_table("Drinks", drink_names))
-        print("Now enter the ID of the favourite drink.")
-        drink_id = input("Enter an ID: ")
-        if drink_id == "":
+        print(table_maker.print_single_column_table("Drinks", drinks.get_names()))
+        print("Now enter the name of their favourite drink.")
+        drink_name = input("Enter a drink name: ")
+        if drink_name == "":
             continue
-        try:
-            drink_id = int(drink_id)
-            assert drink_id in range(1,len(drink_names)+1)
-        except:
-            print(f"ID {drink_id} not recognised. Hit ENTER to return to menu.")
-            input()
+        elif not drinks.check_drink_exists(drink_name):
+            print(f"Drink {drink_name} not recognised.")
+            input("Hit ENTER to return to menu: ")
             os.system("clear")
             continue
-
+        drink = drinks.get_drink(drink_name)
+        
+        person.favourite_drink = drink
+        people.update_person(person)
         os.system("clear")
-        print(f"{get_person_from_id(name_id)}'s favourite drink is now {get_drink_from_id(drink_id)}.\n")
+        print(f"{name}'s favourite drink is now {drink_name}.\n")
         input("Hit ENTER to return to menu.")
 
     elif command.lower() == "e":
@@ -164,5 +158,5 @@ if updated_people:
     update_list_file(people_file, people)
 if updated_drinks:
     update_list_file(drinks_file, drinks)
-if updated_preferences:
-    update_dict_file(preferences_file, preferences)
+# if updated_preferences:
+#     update_dict_file(preferences_file, preferences)
