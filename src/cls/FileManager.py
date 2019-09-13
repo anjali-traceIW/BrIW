@@ -61,7 +61,7 @@ class DrinksFileManager(FileManager):
         drinks = []
         rows = FileManager.read_file(self)
         for row in rows:
-            drinks.append(Drink(row[0]))
+            drinks.append(Drink(row))
         return drinks
 
     def update_file(self, updated_drinks):

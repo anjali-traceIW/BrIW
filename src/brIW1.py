@@ -1,7 +1,10 @@
 import sys
 import os
 import random
-from cls import Round, Person, Drink, FileManager
+from cls.Round import Round
+from cls.Person import Person
+from cls.Drink import Drink 
+from cls import FileManager
 import table_maker
 
 args = sys.argv
@@ -50,9 +53,6 @@ def get_person_from_id(name_id):
 def get_drink_from_id(drink_id):
     return drinks[drink_id-1]
 
-def set_preference(name_id, drink_id):
-    preferences[name_id] = drink_id
-
 def take_list_input(list_to_update, update_preferences=False):
     updated = False
     while True:
@@ -63,10 +63,11 @@ def take_list_input(list_to_update, update_preferences=False):
         if len(item) > max_table_width-6:
             print(f"Item not added - cannot be more than {max_table_width-6} characters. Try again.")
         else: 
-            list_to_update.append(item)
-            updated = True
             if update_preferences:
-                set_preference(item, "")
+                list_to_update.append(Person(item, Drink("")))
+            else: 
+                list_to_update.append(Drink(item))
+            updated = True
             os.system("clear")
             print(f"{item} successfully added. Enter another or hit ENTER to return to menu.")
     os.system("clear")
@@ -92,16 +93,18 @@ while True:
         input("Hit ENTER to return to menu.")
 
     elif command == "1":
-        print(print_single_column_table("People", people))
+        names, drink_names = table_maker.extract_people_and_drinks(people)
+        print(table_maker.print_single_column_table("People", names))
         input("Hit ENTER to return to menu.")
 
     elif command == "2":
-        print(print_single_column_table("Drinks", drinks))
+        drink_names = table_maker.extract_drinks_names(drinks)
+        print(table_maker.print_single_column_table("Drinks", drink_names))
         input("Hit ENTER to return to menu.")
 
     elif command == "3":
         print("Please enter a name to add. Hit enter when done to add another. ")
-        people, success = take_list_input(people)
+        people, success = take_list_input(people, True)
         if success:
             updated_people = True
 
@@ -118,7 +121,7 @@ while True:
     elif command == "6":
         names, drink_names = table_maker.extract_people_and_drinks(people)
         print(table_maker.print_single_column_table("People", names))
-        print("To set a favourite drink, enter the ID of a person.")
+        print("To set a favourite drink, enter the name of a person.")
         name_id = input("Enter an ID: ")
         if name_id == "":
             continue
@@ -145,9 +148,6 @@ while True:
             input()
             os.system("clear")
             continue
-
-        set_preference(name_id, drink_id)
-        updated_preferences = True
 
         os.system("clear")
         print(f"{get_person_from_id(name_id)}'s favourite drink is now {get_drink_from_id(drink_id)}.\n")
