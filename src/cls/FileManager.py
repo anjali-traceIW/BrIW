@@ -42,7 +42,7 @@ class PeopleFileManager(FileManager):
 
     def update_file(self, updated_people):
         rows = []
-        for person in updated_people.values():
+        for person in updated_people.all_people.values():
             rows.append(person.make_csv_line())
         FileManager.overwrite_file(self, rows)
 
@@ -55,12 +55,13 @@ class DrinksFileManager(FileManager):
         drinks = Drinks()
         rows = FileManager.read_file(self)
         for row in rows:
-            drinks.add_drink(Drink(row))
+            new_row = [x.strip() for x in row.split(',')]
+            drinks.add_drink(Drink(new_row[0]))
         self.start_no_of_drinks = len(drinks.get_names())
         return drinks
 
     def update_file(self, updated_drinks):
         rows = []
-        for drink in updated_drinks.values():
+        for drink in updated_drinks.all_drinks.values():
             rows.append(drink.make_csv_line())
         FileManager.overwrite_file(self, rows)

@@ -1,5 +1,5 @@
-Scooby doo, tea
-Shaggy, americano
+Scooby doo,Tea
+Shaggy,Coffee
 Fred,
 Daphne,
-Velma,
+Velma,Lemonade

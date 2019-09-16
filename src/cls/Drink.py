@@ -1,11 +1,11 @@
 class Drink:
 
     def __init__(self, name, temp=""):
-        self.name = name
+        self.name = name.capitalize()
         self.temperature = temp
 
     def make_csv_line(self):
-        return f"{self.name},{self.temperature}\n"
+        return f"{self.name},{self.temperature}"
 
 class Drinks:
 

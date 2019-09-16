@@ -36,8 +36,8 @@ menu = """
 
 """
 welcome = "Welcome to BrIW v0.1!"
-people_file = "data/people.txt"
-drinks_file = "data/drinks.txt"
+people_file_path = "data/people.txt"
+drinks_file_path = "data/drinks.txt"
 preferences_file = "data/preferences.txt"
 max_table_width = 90
 
@@ -78,10 +78,10 @@ def take_list_input(list_to_update, update_preferences=False):
     os.system("clear")
     return list_to_update, updated
 
-people_file = FileManager.PeopleFileManager(people_file)
+people_file = FileManager.PeopleFileManager(people_file_path)
 people = people_file.get_people_from_file()
 
-drinks_file = FileManager.DrinksFileManager(drinks_file)
+drinks_file = FileManager.DrinksFileManager(drinks_file_path)
 drinks = drinks_file.get_drinks_from_file()
 
 updated_people, updated_drinks, updated_preferences = False, False, False
@@ -124,7 +124,7 @@ while True:
     elif command == "6":
         print(table_maker.print_single_column_table("People", people.get_names()))
         print("To set a favourite drink, enter the name of a person.")
-        name = input("Enter a name: ")
+        name = input("Enter a name: ").capitalize()
         if name == "":
             continue
         elif not people.check_person_exists(name):
@@ -136,7 +136,7 @@ while True:
 
         print(table_maker.print_single_column_table("Drinks", drinks.get_names()))
         print("Now enter the name of their favourite drink.")
-        drink_name = input("Enter a drink name: ")
+        drink_name = input("Enter a drink name: ").capitalize()
         if drink_name == "":
             continue
         elif not drinks.check_drink_exists(drink_name):
@@ -148,6 +148,7 @@ while True:
         
         person.favourite_drink = drink
         people.update_person(person)
+        updated_people, updated_drinks = True, True
         os.system("clear")
         print(f"{name}'s favourite drink is now {drink_name}.\n")
         input("Hit ENTER to return to menu.")
@@ -160,8 +161,8 @@ while True:
     os.system("clear")
 
 if updated_people:
-    update_list_file(people_file, people)
+    people_file.update_file(people)
+    # update_list_file(people_file, people)
 if updated_drinks:
-    update_list_file(drinks_file, drinks)
-# if updated_preferences:
-#     update_dict_file(preferences_file, preferences)
+    drinks_file.update_file(drinks)
+    # update_list_file(drinks_file, drinks)

@@ -5,7 +5,7 @@ class Person:
         self.favourite_drink = fav_drink
 
     def make_csv_line(self):
-        return f"{self.name},{self.favourite_drink.name}\n"
+        return f"{self.name},{self.favourite_drink.name}"
 
 class People:
 
