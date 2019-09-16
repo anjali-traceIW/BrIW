@@ -37,13 +37,12 @@ def extract_drinks_names(drinks):
         list_of_drinks.append(drink.name)
     return  list_of_drinks
 
-def print_people_drinks(people_data, headers=("Person", "Fav Drink")):
-    people, drinks = extract_people_and_drinks(people_data)
-    names_width = calculate_column_width(people)-6
-    drinks_width = calculate_column_width(drinks)-6
+def print_people_drinks(people, headers=("Person", "Fav Drink")):
+    names_width = calculate_column_width(people.get_names())-6
+    drinks_width = calculate_column_width(people.get_fav_drinks())-6
     header = "{}{} | {} {}".format(headers[0], " "*(names_width-1-len(headers[0])), headers[1], " "*(drinks_width-len(headers[1])))
     rows = []
-    for person in people_data:
+    for person in people.all_people.values():
         name = person.name
         drink = person.favourite_drink.name
         rows.append("{}{} | {}{}".format(name, " "*(names_width-len(name)-1), drink, " "*(drinks_width-len(drink)-1)))

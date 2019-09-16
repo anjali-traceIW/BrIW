@@ -26,10 +26,16 @@ class People:
         return self.all_people[name]
 
     def update_person(self, person):
-        all_people[person.name] = person
+        self.all_people[person.name] = person
 
     def get_names(self):
         return list(self.all_people.keys())
+
+    def get_fav_drinks(self):
+        fav_drinks = []
+        for person in self.all_people.values():
+            fav_drinks.append(person.favourite_drink.name)
+        return fav_drinks
 
     def check_person_exists(self, name):
         return name in self.all_people.keys()
