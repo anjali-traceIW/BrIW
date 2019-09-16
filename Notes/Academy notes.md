@@ -132,3 +132,15 @@ $HISTSIZE how many commands do you want the command history to remember?
 
 ## OOP
 
+**Encapsulation** - hiding things for the sake of simplicity (and minimising cognitial load)
+
+private and public code for objects. Private code usually for internal messiness a user wouldn't care about/shouldn't access. Python not great at this!
+
+**Inheritance**
+
+**Abstraction**
+
+**Polymorphism**
+
+## Working in a team
+
