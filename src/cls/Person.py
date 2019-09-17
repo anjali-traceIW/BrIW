@@ -7,10 +7,10 @@ class Person:
         self.favourite_drink = fav_drink
 
     def __eq__(self, other_person):
-        return self.name == other_person.name and self.favourite_drink.is_equal(other_person.favourite_drink)
+        return self.name == other_person.name and self.favourite_drink == other_person.favourite_drink
 
     def make_csv_line(self):
-        return "{},{}".format(self.name,self.favourite_drink.name)
+        return f"{self.name},{self.favourite_drink.name}"
 
 class People:
 
