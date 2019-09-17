@@ -6,6 +6,7 @@ from cls.Person import Person
 from cls.Drink import Drink 
 from cls import FileManager
 import table_maker
+import helper
 
 args = sys.argv
 help = f"""HELP: brIW helps you collect drinks rounds. To start, just enter
@@ -25,30 +26,30 @@ menu = """
     [2] Get all drinks                   .-{   }   }-.
     [3] Add people                      (   }     {   )
     [4] Add drinks                      |`-.._____..-'|
-    [5] Get favourite drinks            |             ;--.
-    [6] Set favourite drinks            |            (__  \\
-    [E] Save & Exit                     |             | )  )
+                                        |             ;--.
+    [5] Get favourite drinks            |            (__  \\
+    [6] Set favourite drinks            |             | )  )
                                         |             |/  /
-                                        |             /  / 
+    [7] Start a round                   |             /  / 
                                         |            (  /
-                                        \             y'
+    [E] Save & Exit                     \             y'
                                          `-.._____..-'
 
 """
 welcome = "Welcome to BrIW v0.1!"
 people_file_path = "data/people.txt"
 drinks_file_path = "data/drinks.txt"
-preferences_file = "data/preferences.txt"
+# rounds_file_path = "data/rounds.txt"
 max_table_width = 90
 
 def get_person_id(name):
-    return people.index(name)+1
+    return all_people.index(name)+1
 
 def get_drink_id(drink):
     return drinks.index(drink)+1
 
 def get_person_from_id(name_id):
-    return people[name_id-1]
+    return all_people[name_id-1]
 
 def get_drink_from_id(drink_id):
     return drinks[drink_id-1]
@@ -79,12 +80,15 @@ def take_list_input(list_to_update, update_preferences=False):
     return list_to_update, updated
 
 people_file = FileManager.PeopleFileManager(people_file_path)
-people = people_file.get_people_from_file()
+all_people = people_file.get_people_from_file()
 
 drinks_file = FileManager.DrinksFileManager(drinks_file_path)
 drinks = drinks_file.get_drinks_from_file()
 
-updated_people, updated_drinks, updated_preferences = False, False, False
+# rounds_file = FileManager.RoundsFileManager(rounds_file_path)
+# rounds = rounds_file.get_rounds_from_file()
+
+updated_people, updated_drinks, updated_rounds = False, False, False
 
 os.system("clear")
 print(welcome)
@@ -98,7 +102,7 @@ while True:
         input("Hit ENTER to return to menu.")
 
     elif command == "1":
-        print(table_maker.print_single_column_table("People", people.get_names()))
+        print(table_maker.print_single_column_table("People", all_people.get_names()))
         input("Hit ENTER to return to menu.")
 
     elif command == "2":
@@ -107,7 +111,7 @@ while True:
 
     elif command == "3":
         print("Please enter a name to add. Hit enter when done to add another. ")
-        people, success = take_list_input(people, True)
+        all_people, success = take_list_input(all_people, True)
         if success:
             updated_people = True
 
@@ -118,41 +122,66 @@ while True:
             updated_drinks = True
 
     elif command == "5":
-        print(table_maker.print_people_drinks(people))
+        print(table_maker.print_people_drinks(all_people))
         input("Hit ENTER to return to menu.")
 
     elif command == "6":
-        print(table_maker.print_single_column_table("People", people.get_names()))
+        print(table_maker.print_single_column_table("People", all_people.get_names()))
         print("To set a favourite drink, enter the name of a person.")
         name = input("Enter a name: ").capitalize()
         if name == "":
             continue
-        elif not people.check_person_exists(name):
-            print(f"Person {name} not recognised.")
-            input("Hit ENTER to return to menu: ")
-            os.system("clear")
+        elif not helper.check_a_name(name, all_people):
             continue
-        person = people.get_person(name)
+        person = all_people.get_person(name)
 
         print(table_maker.print_single_column_table("Drinks", drinks.get_names()))
         print("Now enter the name of their favourite drink.")
         drink_name = input("Enter a drink name: ").capitalize()
         if drink_name == "":
             continue
-        elif not drinks.check_drink_exists(drink_name):
-            print(f"Drink {drink_name} not recognised.")
-            input("Hit ENTER to return to menu: ")
-            os.system("clear")
+        elif not helper.check_a_drink(drink_name):
             continue
         drink = drinks.get_drink(drink_name)
         
         person.favourite_drink = drink
-        people.update_person(person)
+        all_people.update_person(person)
         updated_people, updated_drinks = True, True
         os.system("clear")
         print(f"{name}'s favourite drink is now {drink_name}.\n")
         input("Hit ENTER to return to menu.")
 
+    elif command == "7":
+        # print ("Making a new round.")
+        print("Who's making the brews this round?")
+        name = input("Enter the brewer's name: ").capitalize()
+        if not helper.check_a_name(name, all_people):
+            continue
+        round = Round(name)
+        updated_rounds = True
+        if not helper.ask_to_continue("Start the round now?"):
+            rounds.add_round(round)
+            continue
+        round.active = True
+        while True:
+            print("To add someone to this round, please enter their name.")
+            name = input().capitalize()
+            if not helper.check_a_name(name, all_people):
+                continue
+            person = all_people.get_person(name)
+            fav_drink = person.favourite_drink
+            if helper.ask_to_continue(f"{name}'s favourite drink is {fav_drink.name}. Is this their order?"):
+                round.add_order(person, fav_drink)
+                continue
+            print(f"What drink would {name} like?")
+            drink_name = input().capitalize()
+            if not helper.check_a_drink(drink_name, drinks):
+                continue
+            drink = drinks.get_drink(drink_name)
+            round.add_order(person, drink)
+            print(f"Added {person.name}'s order of {drink.name} to round.")
+            input()
+            
     elif command.lower() == "e":
         break
 
@@ -161,8 +190,10 @@ while True:
     os.system("clear")
 
 if updated_people:
-    people_file.update_file(people)
-    # update_list_file(people_file, people)
+    people_file.update_file(all_people)
+    
 if updated_drinks:
     drinks_file.update_file(drinks)
-    # update_list_file(drinks_file, drinks)
+    
+# if updated_rounds:
+#     rounds_file.update_file(rounds)
