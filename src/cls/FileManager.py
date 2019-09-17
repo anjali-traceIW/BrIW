@@ -1,7 +1,7 @@
-import helper
+import src.helper
 #from cls import Person, Drink
-from cls.Person import Person, People
-from cls.Drink import Drink, Drinks
+from src.cls.Person import Person, People
+from src.cls.Drink import Drink, Drinks
 
 class FileManager:
 

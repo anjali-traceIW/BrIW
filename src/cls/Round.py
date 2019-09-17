@@ -1,4 +1,4 @@
-import table_maker
+import src.table_maker
 
 class Round:
 
