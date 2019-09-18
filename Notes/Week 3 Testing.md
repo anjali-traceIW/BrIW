@@ -47,8 +47,80 @@ Basic round functionality created and working. Need to be able to view rounds bu
 
 ### Test Driven Development (TDD)
 
-Mocking/stubbing/spies
+1. Write tests
+2. Run tests (which fail because there is no codebase)
+3. Write the code
+4. Run tests (they pass)
 
-integration testing
+### Mocking/stubbing/spies
 
-BDD
+#### Mocking
+
+Creating a fake version of a classs or sersvice in order to test  something else
+
+Don't care about the implementation of the mocked object/other features
+
+A way of using abstraction/encapsulation.
+
+#### Stubbing
+
+In python, stubbing is covered by mocking
+
+Mimicking the specific behaviour or something, not whole instances, e.g. for a function.
+
+#### Spies
+
+- A stub that also holds information about <u>how</u> they were called.
+- See how the code behaves as you go through it.
+- Tracks local variables/allows inspection at a given point in execution.
+- Python library called KGB available ;)
+
+Say we have mocked some things. 
+
+```python
+@unittest.mock.patch("builtings.input"), return_value=unittest.mock
+def test_input_method(self,input_return):
+  combo = {}
+  input_return.side_effect = ["Henry", "Americano"]
+  
+  expected = {"Henry":"Americano"}
+  
+  actual = input_person_to_add(combo)
+  
+  self.assertEqual(expected, actual)
+```
+
+A side effect is essentially a list of things to return. Will return the next thing in the list each time it is called.
+
+We can check they have indeed been called as expected with things like:
+
+```python
+# Has our mocked henry.full_name been called?
+henry.full_name.assert_called_with()
+
+#
+os_system.assert_called_once_with("clear")
+```
+
+
+
+### Integration testing
+
+- Testing between multiple layers of code (their *integration*)
+- Checking multiple compononts
+- Best to be seperate from unit tests
+- Consider the pyramid: there should be fewer integration tests than unit tests. Recall it's harder to narrow down specific causes in these.
+
+### Behaviour Driven Development (BDD)
+
+Give joint understanding between techy and business of how the application should behave.
+
+Formed through:
+
+- a narritive
+
+Like user stories in requirements!
+
+> As a brewer -- I want to create a round -- so that i can organise a round of drinks
+
+> Given I select create round -- when I input my name into the application -- then I am assigned to make the round of drinks
