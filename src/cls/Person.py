@@ -4,6 +4,8 @@ class Person:
 
     def __init__(self, name, fav_drink=Drink("")):
         self.name = name.strip().capitalize()
+        if not isinstance(fav_drink, Drink):
+            raise TypeError(f"Expected Drink object for favourite drink, received {type(fav_drink)}")
         self.favourite_drink = fav_drink
 
     def __eq__(self, other_person):
@@ -23,11 +25,11 @@ class People:
             return False
         for person_name in self.all_people.keys():
             try: 
-                if not self.get_drink(person_name) == other_people.get_drink(person_name):
-                    # Both contain the drink with name drink_name, but different versions of it
+                if not self.get_person(person_name) == other_people.get_person(person_name):
+                    # Both contain the person with name person_name, but different versions of it
                     return False
             except:
-                # other_drinks does not contain one of the drinks
+                # other_people does not contain one of the peoples' names
                 return False
         return True
 

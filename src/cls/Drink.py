@@ -1,7 +1,7 @@
 class Drink:
 
     def __init__(self, name, temp=""):
-        self.name = name.capitalize()
+        self.name = name.strip().capitalize()
         self.temperature = temp
 
     def __eq__(self, other_drink):
@@ -46,3 +46,4 @@ class Drinks:
 
     def check_drink_exists(self, drink_name):
         return drink_name in self.all_drinks.keys()
+        
