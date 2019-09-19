@@ -89,7 +89,7 @@ if __name__ == "__main__":
         return list_to_update, updated
 
     people_file = PeopleFileManager(people_file_path)
-    all_people = people_file.get_people_from_file()
+    people = people_file.get_people_from_file()
 
     drinks_file = DrinksFileManager(drinks_file_path)
     drinks = drinks_file.get_drinks_from_file()
