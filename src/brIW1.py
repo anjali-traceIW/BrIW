@@ -4,9 +4,12 @@ import random
 from src.cls.Round import Round
 from src.cls.Person import Person
 from src.cls.Drink import Drink 
-from src.cls import FileManager
-import src.table_maker
-import src.helper
+# import src.cls.Round
+# import src.cls.Person
+# import src.cls.Drink
+from src.cls.FileManager import PeopleFileManager, DrinksFileManager, RoundsFileManager
+import src.table_maker as table_maker
+import src.helper as helper
 
 if __name__ == "__main__":
     args = sys.argv
@@ -19,10 +22,18 @@ if __name__ == "__main__":
         else:
             print("Argument not recognised. For help use -h.")
         exit()
-
+    
+    # http://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=BrIW%200.1
     menu = """
+    ██████╗       ██╗██╗    ██╗     ██████╗     ██╗
+    ██╔══██╗      ██║██║    ██║    ██╔═████╗  ████║
+    ██████╔╝█████╗██║██║ █╗ ██║    ██║██╔██║  ╚═██║
+    ██╔══██╗██╔══╝██║██║███╗██║    ████╔╝██║    ██║
+    ██████╔╝██║   ██║╚███╔███╔╝    ╚██████╔╝██╗ ██║
+    ╚═════╝ ╚═╝   ╚═╝ ╚══╝╚══╝      ╚═════╝ ╚═╝ ╚═╝
+
     ============== MENU ==============            {
-                                            {   }
+                                               {   }
         [1] Get all people                      }_{ __{
         [2] Get all drinks                   .-{   }   }-.
         [3] Add people                      (   }     {   )
@@ -40,7 +51,7 @@ if __name__ == "__main__":
     welcome = "Welcome to BrIW v0.1!"
     people_file_path = "data/people.txt"
     drinks_file_path = "data/drinks.txt"
-    # rounds_file_path = "data/rounds.txt"
+    rounds_file_path = "data/rounds.txt"
     max_table_width = 90
 
     def get_person_id(name):
@@ -80,14 +91,14 @@ if __name__ == "__main__":
         os.system("clear")
         return list_to_update, updated
 
-    people_file = FileManager.PeopleFileManager(people_file_path)
+    people_file = PeopleFileManager(people_file_path)
     all_people = people_file.get_people_from_file()
 
-    drinks_file = FileManager.DrinksFileManager(drinks_file_path)
+    drinks_file = DrinksFileManager(drinks_file_path)
     drinks = drinks_file.get_drinks_from_file()
 
-    # rounds_file = FileManager.RoundsFileManager(rounds_file_path)
-    # rounds = rounds_file.get_rounds_from_file()
+    rounds_file = RoundsFileManager(rounds_file_path)
+    rounds = rounds_file.get_rounds_from_file()
 
     updated_people, updated_drinks, updated_rounds = False, False, False
 
@@ -196,5 +207,5 @@ if __name__ == "__main__":
     if updated_drinks:
         drinks_file.update_file(drinks)
         
-    # if updated_rounds:
-    #     rounds_file.update_file(rounds)
+    if updated_rounds:
+        rounds_file.update_file(rounds)
