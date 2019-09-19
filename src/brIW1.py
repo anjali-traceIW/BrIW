@@ -22,33 +22,33 @@ if __name__ == "__main__":
     
     # http://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=BrIW%200.1
     menu = """
-    ██████╗       ██╗██╗    ██╗     ██████╗     ██╗
-    ██╔══██╗      ██║██║    ██║    ██╔═████╗  ████║
-    ██████╔╝█████╗██║██║ █╗ ██║    ██║██╔██║  ╚═██║
-    ██╔══██╗██╔══╝██║██║███╗██║    ████╔╝██║    ██║
-    ██████╔╝██║   ██║╚███╔███╔╝    ╚██████╔╝██╗ ██║
-    ╚═════╝ ╚═╝   ╚═╝ ╚══╝╚══╝      ╚═════╝ ╚═╝ ╚═╝
+██████╗       ██╗██╗    ██╗     ██████╗     ██╗
+██╔══██╗      ██║██║    ██║    ██╔═████╗  ████║
+██████╔╝█████╗██║██║ █╗ ██║    ██║██╔██║  ╚═██║
+██╔══██╗██╔══╝██║██║███╗██║    ████╔╝██║    ██║
+██████╔╝██║   ██║╚███╔███╔╝    ╚██████╔╝██╗ ██║
+╚═════╝ ╚═╝   ╚═╝ ╚══╝╚══╝      ╚═════╝ ╚═╝ ╚═╝
 
-    ============== MENU ==============            {
-                                               {   }
-        [1] Get all people                      }_{ __{
-        [2] Get all drinks                   .-{   }   }-.
-        [3] Add people                      (   }     {   )
-        [4] Add drinks                      |`-.._____..-'|
-                                            |             ;--.
-        [5] Get favourite drinks            |            (__  \\
-        [6] Set favourite drinks            |             | )  )
-                                            |             |/  /
-        [7] Start a round                   |             /  / 
-                                            |            (  /
-        [E] Save & Exit                     \             y'
-                                            `-.._____..-'
+============== MENU ==============            {
+                                           {   }
+    [1] Get all people                      }_{ __{
+    [2] Get all drinks                   .-{   }   }-.
+    [3] Add people                      (   }     {   )
+    [4] Add drinks                      |`-.._____..-'|
+                                        |             ;--.
+    [5] Get favourite drinks            |            (__  \\
+    [6] Set favourite drinks            |             | )  )
+                                        |             |/  /
+    [7] Start a round                   |             /  / 
+                                        |            (  /
+    [E] Save & Exit                     \             y'
+                                         `-.._____..-'
 
     """
     welcome = "Welcome to BrIW v0.1!"
-    people_file_path = "data/people.txt"
-    drinks_file_path = "data/drinks.txt"
-    rounds_file_path = "data/rounds.txt"
+    people_file_path = "data/people.csv"
+    drinks_file_path = "data/drinks.csv"
+    rounds_file_path = "data/rounds.csv"
     max_table_width = 90
 
     def get_person_id(name):
