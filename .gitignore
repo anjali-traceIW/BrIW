@@ -3,6 +3,4 @@
 *.pyc
 .coverage
 .pytest_cache/*
-src/cls/FileManager.py
-*FileManager.py
 src/cls/pwd.py
