@@ -6,6 +6,10 @@ An app to take your drink rounds.
 
 Requires python3. Install with homebrew `brew install python` or your favourite package manager.
 
+Tests use the unittest testing library. Install this with pip using `pip3 install unittest`.
+
+Data files for people, drinks, and rounds are csv files in data/. 
+
 To run: 
 
 - from command line: in the root directory, run `python3 -m src.brIW1`
@@ -13,5 +17,5 @@ To run:
 
 ## How to contribute
 
-Make a branch. Do some things. Submit a pull request to master. Thanks!
+Fork this repository. Do some things. Submit a pull request to master. Thanks!
 
