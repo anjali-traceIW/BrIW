@@ -10,10 +10,10 @@ class Round:
         self.active = active
         # self.started = "Make this a timestamp?"
 
-    def get_people(self):
+    def get_peoples_names(self):
         return orders.keys()
 
-    def get_drinks(self):
+    def get_drinks_names(self):
         return orders.values()
 
     def add_order(self, person, drink):
@@ -21,7 +21,7 @@ class Round:
             raise TypeError(f"Round.add_order(): Expected a Person object, received a {type(person)} object instead.")
         elif not isinstance(drink, Drink):
             raise TypeError(f"Round.add_order(): Expected a Drink object, received a {type(drink)} object instead.")
-        self.orders[person] = drink
+        self.orders[person.name] = drink.name
 
     def make_csv_line(self):
         line = f"{self.active},{self.owner},"

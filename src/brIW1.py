@@ -51,18 +51,6 @@ if __name__ == "__main__":
     rounds_file_path = "data/rounds.csv"
     max_table_width = 90
 
-    def get_person_id(name):
-        return all_people.index(name)+1
-
-    def get_drink_id(drink):
-        return drinks.index(drink)+1
-
-    def get_person_from_id(name_id):
-        return all_people[name_id-1]
-
-    def get_drink_from_id(drink_id):
-        return drinks[drink_id-1]
-
     def take_list_input(list_to_update, update_preferences=False):
         updated = False
         while True:
@@ -89,13 +77,13 @@ if __name__ == "__main__":
         return list_to_update, updated
 
     people_file = PeopleFileManager(people_file_path)
-    people = people_file.get_people_from_file()
+    all_people = people_file.get_people_from_file()
 
     drinks_file = DrinksFileManager(drinks_file_path)
     drinks = drinks_file.get_drinks_from_file()
 
     rounds_file = RoundsFileManager(rounds_file_path)
-    rounds = rounds_file.get_rounds_from_file(people, drinks)
+    rounds = rounds_file.get_rounds_from_file(all_people, drinks)
 
     updated_people, updated_drinks, updated_rounds = False, False, False
 
@@ -149,7 +137,7 @@ if __name__ == "__main__":
             drink_name = input("Enter a drink name: ").capitalize()
             if drink_name == "":
                 continue
-            elif not helper.check_a_drink(drink_name):
+            elif not helper.check_a_drink(drink_name, drinks):
                 continue
             drink = drinks.get_drink(drink_name)
             
@@ -175,12 +163,15 @@ if __name__ == "__main__":
             while True:
                 print("To add someone to this round, please enter their name.")
                 name = input().capitalize()
+                if name == "":
+                    break
                 if not helper.check_a_name(name, all_people):
                     continue
                 person = all_people.get_person(name)
                 fav_drink = person.favourite_drink
                 if helper.ask_to_continue(f"{name}'s favourite drink is {fav_drink.name}. Is this their order?"):
                     round.add_order(person, fav_drink)
+                    print(f"Added {person.name}'s order of {fav_drink.name} to round.")
                     continue
                 print(f"What drink would {name} like?")
                 drink_name = input().capitalize()
@@ -189,7 +180,6 @@ if __name__ == "__main__":
                 drink = drinks.get_drink(drink_name)
                 round.add_order(person, drink)
                 print(f"Added {person.name}'s order of {drink.name} to round.")
-                input()
                 
         elif command.lower() == "e":
             break
