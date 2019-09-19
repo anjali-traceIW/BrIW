@@ -4,7 +4,7 @@ import os
 
 def ask_to_continue(message):
     while True:
-        print(f"{message} (y/n)")
+        print(f"{message} Continue? (y/n)")
         choice = input().lower()
         if choice == "y":
             return True

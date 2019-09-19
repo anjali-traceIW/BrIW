@@ -12,13 +12,17 @@ class FileManager:
 
     def read_file(self):
         items = []
-        with open(self.file_path,"rt",newline="\n") as file:
-            for line in file:
-                if line[:-1] != "":
-                    items.append(line[:-1].capitalize())
+        try:
+            with open(self.file_path,"rt",newline="\n") as file:
+                for line in file:
+                    if line[:-1] != "":
+                        items.append(line[:-1].capitalize())
+        except FileNotFoundError:
+            src.helper.ask_to_continue(f"Invalid file supplied: {self.file_path}")
+            return items
 
         if len(items) == 0:
-            helper.ask_to_continue(f"Empty file supplied: {self.file_path}")
+            src.helper.ask_to_continue(f"Empty file supplied: {self.file_path}")
 
         return items
 
