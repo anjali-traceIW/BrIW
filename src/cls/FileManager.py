@@ -19,6 +19,7 @@ class FileManager:
                         items.append(line[:-1].capitalize())
         except FileNotFoundError:
             src.helper.ask_to_continue(f"Invalid file supplied: {self.file_path}")
+            return items
 
         if len(items) == 0:
             src.helper.ask_to_continue(f"Empty file supplied: {self.file_path}")
