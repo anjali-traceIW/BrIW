@@ -2,6 +2,8 @@ import src.helper
 from src.cls.Person import Person, People
 from src.cls.Drink import Drink, Drinks
 from src.cls.Round import Round, Rounds
+from src.cls.param import *
+import pymysql
 
 class FileManager:
 
@@ -32,6 +34,26 @@ class FileManager:
                 file.write(f"{line}\n")
     
 class PeopleFileManager(FileManager):
+
+    def __init__(self, people, drinks):
+        with pymysql.connect(
+            hostname, #host
+            username, #username
+            password, #password
+            database_name,
+            autocommit=True
+        ) as db:
+
+            try: 
+                db.execute("SELECT person_name, drink_name FROM people LEFT JOIN drinks ON people.favourite_drink_id=drinks.drink_id")
+                results = db.fetchall()
+                for row in results:
+                    print(row)
+                    people.add_person(Person(row[1],row[2]))
+            except Exception as e:
+                # TODO: improve this sad message
+                print("Something went wrong...")
+                print(e)
 
     def get_people_from_file(self):
         people = People()

@@ -3,4 +3,4 @@
 *.pyc
 .coverage
 .pytest_cache/*
-src/cls/pwd.py
+src/cls/param.py
