@@ -4,9 +4,6 @@ import random
 from src.cls.Round import Round
 from src.cls.Person import Person
 from src.cls.Drink import Drink 
-# import src.cls.Round
-# import src.cls.Person
-# import src.cls.Drink
 from src.cls.FileManager import PeopleFileManager, DrinksFileManager, RoundsFileManager
 import src.table_maker as table_maker
 import src.helper as helper
@@ -98,7 +95,7 @@ if __name__ == "__main__":
     drinks = drinks_file.get_drinks_from_file()
 
     rounds_file = RoundsFileManager(rounds_file_path)
-    rounds = rounds_file.get_rounds_from_file()
+    rounds = rounds_file.get_rounds_from_file(people, drinks)
 
     updated_people, updated_drinks, updated_rounds = False, False, False
 

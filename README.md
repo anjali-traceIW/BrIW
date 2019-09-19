@@ -8,7 +8,7 @@ Requires python3. Install with homebrew `brew install python` or your favourite 
 
 To run: 
 
-- from command line: in the root directory, run `python3 src/brIW1.py`
+- from command line: in the root directory, run `python3 -m src.brIW1`
 - otherwise: the main script is src/brIW.py so run this in your IDE of choice 
 
 ## How to contribute
