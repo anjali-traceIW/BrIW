@@ -4,3 +4,4 @@
 .coverage
 .pytest_cache/*
 src/cls/param.py
+.DS_Store
