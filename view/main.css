@@ -11,8 +11,13 @@ a {
     font-size: 30px;
 }
 
-.centering {
+.center-text {
     text-align:center;
+}
+
+.centered {
+    margin-left:auto;
+    margin-right:auto;
 }
 
 .header {
@@ -27,4 +32,8 @@ h2 {
 
 .the-matrix {
     background-image:url("matrix.gif");
+}
+
+.box {
+    background-color:"";
 }
