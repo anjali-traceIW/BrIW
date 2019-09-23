@@ -1,0 +1,30 @@
+body {
+    font-family:webdings;
+}
+
+p {
+    color: white;
+}
+
+a {
+    background-color: rgb(47, 0, 255); 
+    font-size: 30px;
+}
+
+.centering {
+    text-align:center;
+}
+
+.header {
+    color:rgb(255, 0, 242);
+    background-color: rgb(251, 255, 0);
+    font-size:50px;
+}
+
+h2 {
+    font-size:30px;
+}
+
+.the-matrix {
+    background-image:url("matrix.gif");
+}
