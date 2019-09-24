@@ -4,8 +4,10 @@ from src.cls.Drink import Drink, Drinks
 from src.cls.Round import Round, Rounds
 from src.cls.param import *
 import pymysql
+from datetime import datetime
 
 class FileManager:
+    datetime_format = "%d.%m.%y %H:%M:%S"
 
     def __init__(self, file_path):
         if file_path == "":
@@ -112,20 +114,24 @@ class RoundsFileManager(FileManager):
         rounds = Rounds()
         rows = FileManager.read_file(self)
         for row in rows:
-            new_row = [x.strip() for x in row.split(',')]
-            round = Round(owner=new_row[1], active=new_row[0])
-            for order in new_row[2:]:
-                # Of the format 'name:drink_name'
-                order = [x.strip() for x in order.split(':')]
+            new_row = [x.strip().capitalize() for x in row.split(',')]
+            time_started = datetime.strptime(new_row[0], FileManager.datetime_format)
+            owner = people.get_person(new_row[2])
+            active = (new_row[1] == "True") # Make a boolean value
+            round = Round(owner, time_started, active)
+            for order in new_row[3:]:
+                # Of the format 'person_name:drink_name'
+                order = [x.strip().capitalize() for x in order.split(':')]
+                print(order)
                 person = people.get_person(order[0])
                 drink = drinks.get_drink(order[1])
-                round.add_order(person,drink)
+                round.add_order(person, drink)
             rounds.add_round(round)
         return rounds
 
     def update_file(self, updated_rounds):
         rows = []
         for round in updated_rounds.all_rounds:
-            rows.append(round.make_csv_line())
+            rows.append(round.make_csv_line(FileManager.datetime_format))
         FileManager.overwrite_file(self, rows)
     

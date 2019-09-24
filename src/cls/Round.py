@@ -2,6 +2,7 @@ from src import table_maker
 from src.cls.Person import *
 from src.cls.Drink import *
 from prettytable import PrettyTable
+from datetime import datetime
 
 class Round:
 
@@ -32,11 +33,11 @@ class Round:
             raise TypeError(f"Round.add_order(): Expected a Drink object, received a {type(drink)} object instead.")
         self.orders[person.name] = drink.name
 
-    def make_csv_line(self):
-        line = f"{self.active},{self.owner},"
+    def make_csv_line(self, datetime_format):
+        line = f"{self.time_started.strftime(datetime_format)},{self.active},{self.owner.capitalize()},"
         for person, drink in self.orders.items():
             line += f"{person.name}:{drink.name},"
-        return line
+        return line[:-1]
 
     def print_orders(self):
         return table_maker.print_people_drinks(orders, ("Name", "Drink"))
