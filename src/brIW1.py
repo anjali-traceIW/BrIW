@@ -24,27 +24,27 @@ if __name__ == "__main__":
     
     # http://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=BrIW%200.1
     menu = """
-██████╗       ██╗██╗    ██╗     ██████╗     ██╗
-██╔══██╗      ██║██║    ██║    ██╔═████╗  ████║
-██████╔╝█████╗██║██║ █╗ ██║    ██║██╔██║  ╚═██║
-██╔══██╗██╔══╝██║██║███╗██║    ████╔╝██║    ██║
-██████╔╝██║   ██║╚███╔███╔╝    ╚██████╔╝██╗ ██║
-╚═════╝ ╚═╝   ╚═╝ ╚══╝╚══╝      ╚═════╝ ╚═╝ ╚═╝
+    ██████╗       ██╗██╗    ██╗     ██████╗     ██╗
+    ██╔══██╗      ██║██║    ██║    ██╔═████╗  ████║
+    ██████╔╝█████╗██║██║ █╗ ██║    ██║██╔██║  ╚═██║
+    ██╔══██╗██╔══╝██║██║███╗██║    ████╔╝██║    ██║
+    ██████╔╝██║   ██║╚███╔███╔╝    ╚██████╔╝██╗ ██║
+    ╚═════╝ ╚═╝   ╚═╝ ╚══╝╚══╝      ╚═════╝ ╚═╝ ╚═╝
 
-============== MENU ==============            {
-                                           {   }
-    [1] Get all people                      }_{ __{
-    [2] Get all drinks                   .-{   }   }-.
-    [3] Add people                      (   }     {   )
-    [4] Add drinks                      |`-.._____..-'|
-                                        |             ;--.
-    [5] Get favourite drinks            |            (__  \\
-    [6] Set favourite drinks            |             | )  )
-                                        |             |/  /
-    [7] Start a round                   |             /  / 
-    [8] View rounds                     |            (  /
-                                        \             y'
-    [E] Save & Exit                      `-.._____..-'
+                                              {
+    [1] Get all people                     {   }
+    [2] Get all drinks                      }_{ __{
+    [3] Add people                       .-{   }   }-.
+    [4] Add drinks                      (   }     {   )
+                                        |`-.._____..-'|
+    [5] Get favourite drinks            |             ;--.
+    [6] Set favourite drinks            |            (__  \\
+                                        |             | )  )
+    [7] Start a round                   |             |/  /
+    [8] View rounds                     |             /  / 
+                                        |            (  /
+    [E] Save & Exit                     \             y'
+                                         `-.._____..-'
 
     """
     welcome = "Welcome to BrIW v0.1!"
@@ -165,18 +165,20 @@ if __name__ == "__main__":
                 continue
             round.active = True
             while True:
-                print("To add someone to this round, please enter their name.")
+                print("To add someone to this round, please enter their name. Else hit ENTER to return to menu.")
                 name = input().capitalize()
                 if name == "":
                     break
                 if not helper.check_a_name(name, all_people):
                     continue
+
                 person = all_people.get_person(name)
                 fav_drink = person.favourite_drink
                 if helper.ask_a_question_to_continue(f"{name}'s favourite drink is {fav_drink.name}. Is this their order?"):
                     round.add_order(person, fav_drink)
                     print(f"Added {person.name}'s order of {fav_drink.name} to round.")
                     continue
+
                 print(f"What drink would {name} like?")
                 drink_name = input().capitalize()
                 if not helper.check_a_drink(drink_name, drinks):

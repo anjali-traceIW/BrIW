@@ -10,6 +10,10 @@ class Drink:
     def make_csv_line(self):
         return f"{self.name},{self.temperature}"
 
+    def make_json_str(self):
+        # json_str = '{ "name":"John", "age":30, "city":"New York"}'
+        return "{ 'drink_name':'" + self.name + "', 'temperature':'" + self.temperature +"'}"
+
 class Drinks:
 
     def __init__(self, drinks=[]):
@@ -46,4 +50,12 @@ class Drinks:
 
     def check_drink_exists(self, drink_name):
         return drink_name in self.all_drinks.keys()
+
+    def make_json_str(self):
+        # json_str = '{ "name":"John", "age":30, "city":"New York"}'
+        json_str = "{ 'all_drinks': {"
+        for drink in self.all_drinks.values():
+            json_str += f" '{drink.name}':'{drink.make_json_str()}',"
+        json_str = json_str[:-1] + "}}"   # Remove final comma
+        return json_str
         
