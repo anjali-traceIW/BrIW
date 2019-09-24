@@ -2,9 +2,9 @@ import os
 # from cls.Person import People
 # from cls.Drink import Drinks
 
-def ask_to_continue(message):
+def ask_a_question_to_continue(message):
     while True:
-        print(f"{message} Continue? (y/n)")
+        print(f"{message} (y/n)")
         choice = input().lower()
         if choice == "y":
             return True

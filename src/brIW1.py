@@ -5,6 +5,7 @@ from src.cls.Round import Round
 from src.cls.Person import Person
 from src.cls.Drink import Drink 
 from src.cls.FileManager import PeopleFileManager, DrinksFileManager, RoundsFileManager
+from prettytable import PrettyTable
 import src.table_maker as table_maker
 import src.helper as helper
 
@@ -40,9 +41,9 @@ if __name__ == "__main__":
     [6] Set favourite drinks            |             | )  )
                                         |             |/  /
     [7] Start a round                   |             /  / 
-                                        |            (  /
-    [E] Save & Exit                     \             y'
-                                         `-.._____..-'
+    [8] View rounds                     |            (  /
+                                        \             y'
+    [E] Save & Exit                      `-.._____..-'
 
     """
     welcome = "Welcome to BrIW v0.1!"
@@ -76,11 +77,13 @@ if __name__ == "__main__":
         os.system("clear")
         return list_to_update, updated
 
+    drinks_file = DrinksFileManager(drinks_file_path)
+    # drinks = drinks_file.get_drinks_from_file()
+    drinks = drinks_file.get_drinks_from_db()
+
     people_file = PeopleFileManager(people_file_path)
     all_people = people_file.get_people_from_file()
-
-    drinks_file = DrinksFileManager(drinks_file_path)
-    drinks = drinks_file.get_drinks_from_file()
+    # all_people = people_file.get_people_from_db(drinks)
 
     rounds_file = RoundsFileManager(rounds_file_path)
     rounds = rounds_file.get_rounds_from_file(all_people, drinks)
@@ -154,9 +157,9 @@ if __name__ == "__main__":
             name = input("Enter the brewer's name: ").capitalize()
             if not helper.check_a_name(name, all_people):
                 continue
-            round = Round(name)
+            round = Round(all_people.get_person(name))
             updated_rounds = True
-            if not helper.ask_to_continue("Start the round now?"):
+            if not helper.ask_a_question_to_continue("Start the round now?"):
                 rounds.add_round(round)
                 continue
             round.active = True
@@ -169,7 +172,7 @@ if __name__ == "__main__":
                     continue
                 person = all_people.get_person(name)
                 fav_drink = person.favourite_drink
-                if helper.ask_to_continue(f"{name}'s favourite drink is {fav_drink.name}. Is this their order?"):
+                if helper.ask_a_question_to_continue(f"{name}'s favourite drink is {fav_drink.name}. Is this their order?"):
                     round.add_order(person, fav_drink)
                     print(f"Added {person.name}'s order of {fav_drink.name} to round.")
                     continue
@@ -180,7 +183,13 @@ if __name__ == "__main__":
                 drink = drinks.get_drink(drink_name)
                 round.add_order(person, drink)
                 print(f"Added {person.name}'s order of {drink.name} to round.")
-                
+            print("The orders for this round are:\n\n")
+            table_text = PrettyTable(["Name","Order"])
+            for name, drink in round.orders.items():
+                table_text.add_row([name, drink])
+            print(table_text)
+            input()
+
         elif command.lower() == "e":
             break
 

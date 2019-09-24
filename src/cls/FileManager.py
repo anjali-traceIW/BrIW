@@ -20,13 +20,26 @@ class FileManager:
                     if line[:-1] != "":
                         items.append(line[:-1].capitalize())
         except FileNotFoundError:
-            src.helper.ask_to_continue(f"Invalid file supplied: {self.file_path}")
+            src.helper.ask_a_question_to_continue(f"Invalid file supplied: {self.file_path}")
             return items
 
         if len(items) == 0:
-            src.helper.ask_to_continue(f"Empty file supplied: {self.file_path}")
+            src.helper.ask_a_question_to_continue(f"Empty file supplied: {self.file_path}")
 
         return items
+
+    def execute_query(self, query, param=tuple()):
+        with pymysql.connect(
+            hostname,
+            username,
+            password,
+            database_name,
+            autocommit=True
+        ) as db:
+        # Want another try?
+            db.execute(query)
+            results = db.fetchall()
+        return results
 
     def overwrite_file(self, new_lines):
         with open(self.file_path,"w") as file:
@@ -34,26 +47,20 @@ class FileManager:
                 file.write(f"{line}\n")
     
 class PeopleFileManager(FileManager):
+        
+    def get_people_from_db(self, drinks):
+        people = People()
+        try:
+            results = FileManager.execute_query(self, "SELECT person_name, drink_name FROM people LEFT JOIN drinks ON people.favourite_drink_id=drinks.drink_id")
+        except Exception as e:
+            # TODO: improve this sad message
+            print("Something went wrong...")
+            print(e)
+        for row in results:
+            print(row)
+            people.add_person(Person(row[0], drinks.get_drink(row[1])))
 
-    def __init__(self, people, drinks):
-        with pymysql.connect(
-            hostname, #host
-            username, #username
-            password, #password
-            database_name,
-            autocommit=True
-        ) as db:
-
-            try: 
-                db.execute("SELECT person_name, drink_name FROM people LEFT JOIN drinks ON people.favourite_drink_id=drinks.drink_id")
-                results = db.fetchall()
-                for row in results:
-                    print(row)
-                    people.add_person(Person(row[1],row[2]))
-            except Exception as e:
-                # TODO: improve this sad message
-                print("Something went wrong...")
-                print(e)
+        return people
 
     def get_people_from_file(self):
         people = People()
@@ -70,6 +77,20 @@ class PeopleFileManager(FileManager):
         FileManager.overwrite_file(self, rows)
 
 class DrinksFileManager(FileManager):
+
+    def get_drinks_from_db(self):
+        drinks = Drinks()
+        try:
+            results = FileManager.execute_query(self, "SELECT drink_name FROM drinks")
+            for row in results:
+                print(row)
+                drinks.add_drink(Drink(row[0]))
+        except Exception as e:
+            # TODO: improve this sad message
+            print("Something went wrong...")
+            print(e)
+
+        return drinks
 
     def get_drinks_from_file(self):
         drinks = Drinks()
@@ -107,4 +128,4 @@ class RoundsFileManager(FileManager):
         for round in updated_rounds.all_rounds:
             rows.append(round.make_csv_line())
         FileManager.overwrite_file(self, rows)
-        
+    
