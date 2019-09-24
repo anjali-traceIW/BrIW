@@ -8,6 +8,7 @@ from src.cls.FileManager import PeopleFileManager, DrinksFileManager, RoundsFile
 from prettytable import PrettyTable
 import src.table_maker as table_maker
 import src.helper as helper
+from datetime import datetime
 
 if __name__ == "__main__":
     args = sys.argv
@@ -157,7 +158,7 @@ if __name__ == "__main__":
             name = input("Enter the brewer's name: ").capitalize()
             if not helper.check_a_name(name, all_people):
                 continue
-            round = Round(all_people.get_person(name))
+            round = Round(all_people.get_person(name), datetime.now())
             updated_rounds = True
             if not helper.ask_a_question_to_continue("Start the round now?"):
                 rounds.add_round(round)
@@ -183,12 +184,15 @@ if __name__ == "__main__":
                 drink = drinks.get_drink(drink_name)
                 round.add_order(person, drink)
                 print(f"Added {person.name}'s order of {drink.name} to round.")
-            print("The orders for this round are:\n\n")
-            table_text = PrettyTable(["Name","Order"])
-            for name, drink in round.orders.items():
-                table_text.add_row([name, drink])
-            print(table_text)
-            input()
+            rounds.add_round(round)
+            print("This round: ")
+            print(round)
+            input("Hit ENTER to return to menu.")
+
+        elif command == "8":
+            for round in rounds.all_rounds:
+                print(round)
+            input("Hit ENTER to return to menu.")
 
         elif command.lower() == "e":
             break

@@ -1,14 +1,23 @@
 from src import table_maker
 from src.cls.Person import *
 from src.cls.Drink import *
+from prettytable import PrettyTable
 
 class Round:
 
-    def __init__(self, owner, active=False):
-        self.owner = owner
+    def __init__(self, owner, time_started, active=False):
+        self.owner = owner.name
         self.orders = {}
+        self.time_started = time_started
         self.active = active
-        # self.started = "Make this a timestamp?"
+
+    def __str__(self):
+        round_text = f"Round started by {self.owner} at {self.time_started}: \n\n"
+        round_table = PrettyTable(["Person", "Drink"])
+        for name, drink in self.orders.items():
+            round_table.add_row([name, drink])
+        round_text += round_table.get_string() + "\n\n"
+        return round_text
 
     def get_peoples_names(self):
         return orders.keys()
