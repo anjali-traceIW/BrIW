@@ -7,7 +7,7 @@ from datetime import datetime
 class Round:
 
     def __init__(self, owner, time_started, active=False):
-        self.owner = owner.name
+        self.owner = owner
         self.orders = {}
         self.time_started = time_started
         self.active = active
@@ -43,7 +43,7 @@ class Round:
         return table_maker.print_people_drinks(orders, ("Name", "Drink"))
 
     def make_json_str(self):
-        return "{ 'time_started':'"+ str(self.time_started) +"', 'active':'"+str(self.active)+"', 'owner':'"+ self.owner +"', 'orders':" + str(self.orders) + "}"
+        return "{ 'time_started':'"+ str(self.time_started) +"', 'active':'"+str(self.active)+"', 'owner':'"+ self.owner.name +"', 'orders':" + str(self.orders) + "}"
 
 class Rounds:
 
@@ -73,3 +73,15 @@ class Rounds:
             json_str += round.make_json_str() + ","
         json_str = json_str[:-1] + "}"
         return json_str
+
+def encode_a_round(self, round):
+    return "{'time_started':'"+ str(self.time_started) +"', 'active':'"+str(self.active)+"', 'owner':'"+ self.owner +"', 'orders':" + str(self.orders) + "}"
+
+def decode_a_round(data):
+    owner = data["owner"]
+    time_started = datetime.strptime(data["time_started"], "%d.%m.%y %H:%M:%S")
+    active = (data["active"] == "True")
+    orders = data["orders"].__dict__
+
+    round = Round(owner, time_started, active)
+    round.orders = orders

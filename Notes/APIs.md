@@ -33,3 +33,12 @@ REST REpresentational State Transfer
   ```
 
 - Body: the content. The information you want to send to a server
+
+## Curl
+
+```bash
+curl -X <request type> -H <header values> -d <"{json string}" or content file address>
+
+curl -X POST localhost:8080 -H "Content-Type:application/json" -d "{"First_name": "Bob", "Last_name":"The Builder"}" 
+```
+
