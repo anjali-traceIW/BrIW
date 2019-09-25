@@ -42,6 +42,9 @@ class Round:
     def print_orders(self):
         return table_maker.print_people_drinks(orders, ("Name", "Drink"))
 
+    def make_json_str(self):
+        return "{ 'time_started':'"+ str(self.time_started) +"', 'active':'"+str(self.active)+"', 'owner':'"+ self.owner +"', 'orders':" + str(self.orders) + "}"
+
 class Rounds:
 
     def __init__(self, rounds=[]):
@@ -63,3 +66,10 @@ class Rounds:
             if round.active:
                 active_rounds.append(round)
         return active_rounds
+
+    def make_json_str(self):
+        json_str = "{ "
+        for round in self.all_rounds:
+            json_str += round.make_json_str() + ","
+        json_str = json_str[:-1] + "}"
+        return json_str
