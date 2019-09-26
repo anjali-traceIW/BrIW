@@ -7,7 +7,12 @@ from datetime import datetime
 class Round:
 
     def __init__(self, owner, time_started, active=False):
-        self.owner = owner
+        if isinstance(owner, Person):
+            self.owner = owner.name
+        elif isinstance(owner, str):
+            self.owner = owner
+        else:
+            raise TypeError(f"Expected Person object or string person name to create a round. Recieved {type(owner)}")
         self.orders = {}
         self.time_started = time_started
         self.active = active
