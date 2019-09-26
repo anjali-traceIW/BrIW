@@ -13,16 +13,16 @@ class Test_People(unittest.TestCase):
 		person = Person("")
 
 		# Assert
-		self.assertEquals(expected_name, person.name)
-		self.assertEquals(expected_drink, person.favourite_drink)
+		self.assertEqual(expected_name, person.name)
+		self.assertEqual(expected_drink, person.favourite_drink)
 
 	def test_make_a_person_with_no_fav_drink(self):
 		expected_name, expected_drink = "Janet", Drink("") 
 
 		person = Person("janet")
 
-		self.assertEquals(expected_name, person.name)
-		self.assertEquals(expected_drink, person.favourite_drink)
+		self.assertEqual(expected_name, person.name)
+		self.assertEqual(expected_drink, person.favourite_drink)
 
 	def test_make_a_person_with_a_fav_drink(self):
 		expected_name, expected_drink = "Brad", Drink("milkshake") 
@@ -30,7 +30,7 @@ class Test_People(unittest.TestCase):
 
 		actual_person = Person("brad", Drink("milkshake"))
 
-		self.assertEquals(expected_person, actual_person)
+		self.assertEqual(expected_person, actual_person)
 
 	def test_make_a_person_without_args(self):
 		with self.assertRaises(Exception):
