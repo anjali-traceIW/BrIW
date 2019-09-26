@@ -15,26 +15,28 @@ class DbManager:
     #         query += " "
 
     def execute_select(query, param=tuple()):
-        with pymysql.connect(
+        connection = pymysql.connect(
             hostname,
             username,
             password,
             database_name,
             autocommit=True
-        ) as db:
+        ) 
+        with connection.cursor() as db:
         # Want another try?
             db.execute(query, param)
             results = db.fetchall()
         return results
 
     def execute_update_or_insert(query, param=tuple()):
-        with pymysql.connect(
+        connection = pymysql.connect(
             hostname,
             username,
             password,
             database_name,
             autocommit=True
-        ) as db:
+        )
+        with connection.cursor() as db:
             db.execute(query, param)
             return db.affected_rows()
     
@@ -43,7 +45,7 @@ class PeopleDbManager(DbManager):
     def get_all_people(drinks):
         people = People()
         try:
-            results = DbManager.execute_select(self, "SELECT person_name, drink_name FROM people LEFT JOIN drinks ON people.favourite_drink_id=drinks.drink_id")
+            results = DbManager.execute_select("SELECT person_name, drink_name FROM people LEFT JOIN drinks ON people.favourite_drink_id=drinks.drink_id")
         except Exception as e:
             # TODO: improve this sad message
             print("Something went wrong...")
@@ -65,7 +67,7 @@ class DrinksDbManager(DbManager):
     def get_all_drinks():
         drinks = Drinks()
         try:
-            results = DbManager.execute_select(self, "SELECT drink_name FROM drinks")
+            results = DbManager.execute_select("SELECT drink_name FROM drinks")
             for row in results:
                 print(row)
                 drinks.add_drink(Drink(row[0]))
@@ -84,26 +86,26 @@ class DrinksDbManager(DbManager):
 
 class RoundsDbManager:
 
-    def get_rounds_from_file(people, drinks):
-        rounds = Rounds()
-        rows = FileManager.read_file(self)
-        for row in rows:
-            new_row = [x.strip().capitalize() for x in row.split(',')]
-            time_started = datetime.strptime(new_row[0], FileManager.datetime_format)
-            owner = people.get_person(new_row[2])
-            active = (new_row[1] == "True") # Make a boolean value
-            round = Round(owner, time_started, active)
-            for order in new_row[3:]:
-                # Of the format 'person_name:drink_name'
-                order = [x.strip().capitalize() for x in order.split(':')]
-                print(order)
-                person = people.get_person(order[0])
-                drink = drinks.get_drink(order[1])
-                round.add_order(person, drink)
-            rounds.add_round(round)
-        return rounds
+    # def get_rounds_from_file(people, drinks):
+    #     rounds = Rounds()
+    #     rows = FileManager.read_file(self)
+    #     for row in rows:
+    #         new_row = [x.strip().capitalize() for x in row.split(',')]
+    #         time_started = datetime.strptime(new_row[0], FileManager.datetime_format)
+    #         owner = people.get_person(new_row[2])
+    #         active = (new_row[1] == "True") # Make a boolean value
+    #         round = Round(owner, time_started, active)
+    #         for order in new_row[3:]:
+    #             # Of the format 'person_name:drink_name'
+    #             order = [x.strip().capitalize() for x in order.split(':')]
+    #             print(order)
+    #             person = people.get_person(order[0])
+    #             drink = drinks.get_drink(order[1])
+    #             round.add_order(person, drink)
+    #         rounds.add_round(round)
+    #     return rounds
 
-    def get_all_rounds(self):
+    def get_all_rounds():
         rounds = Rounds()
         try: 
             results = DbManager.execute_select("SELECT active, time_started, person_name as owner_name FROM rounds JOIN people on person_id=owner_id;")

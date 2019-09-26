@@ -16,6 +16,17 @@ class Test_integration(unittest.TestCase):
 
         drinks_db_mock.get_all_drinks.assert_called()
 
+    def test_get_people_from_db_on_startup(self):
+        people_db_mock = MagicMock(wraps=PeopleDbManager)
+        # App initialisation requires actual people list to set up rounds, so 
+        # mock that too while we're not mocking the other db managers
+        mock_people = People([Person("Velma"), Person("Daphne"), Person("Fred"), Person("Scooby doo")])
+        people_db_mock.get_all_people.side_effect = [mock_people]
+
+        app = App(people_db_mock, DrinksDbManager, RoundsDbManager)
+
+        people_db_mock.get_all_people.assert_called()
+
 
     # def test_update_drinks_in_db_on_exit(self):
     #     drinks_db_mock = MagicMock(wraps=DrinksDbManager)    
