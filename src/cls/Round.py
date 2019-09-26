@@ -84,7 +84,6 @@ def make_a_round_from_string_values(active, time_started, owner, orders="{}"):
     string_data["orders"] = orders
     return decode_a_round(string_data)
 
-
 def decode_a_round(self, data):
     owner = data["owner"]
     time_started = datetime.strptime(data["time_started"], "%d.%m.%y %H:%M:%S")
