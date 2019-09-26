@@ -134,4 +134,3 @@ class RoundsFileManager(FileManager):
         for round in updated_rounds.all_rounds:
             rows.append(round.make_csv_line(FileManager.datetime_format))
         FileManager.overwrite_file(self, rows)
-    

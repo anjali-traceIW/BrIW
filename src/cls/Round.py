@@ -42,8 +42,8 @@ class Round:
     def print_orders(self):
         return table_maker.print_people_drinks(orders, ("Name", "Drink"))
 
-    def make_json_str(self):
-        return "{ 'time_started':'"+ str(self.time_started) +"', 'active':'"+str(self.active)+"', 'owner':'"+ self.owner.name +"', 'orders':" + str(self.orders) + "}"
+    def make_json_obj(self):
+        return { 'time_started':str(self.time_started), 'active':self.active, 'owner':self.owner.name , 'orders':self.orders}
 
 class Rounds:
 
@@ -67,17 +67,25 @@ class Rounds:
                 active_rounds.append(round)
         return active_rounds
 
-    def make_json_str(self):
-        json_str = "{ "
+    def make_json_obj(self):
+        rounds_list = []
         for round in self.all_rounds:
-            json_str += round.make_json_str() + ","
-        json_str = json_str[:-1] + "}"
-        return json_str
+            rounds_list.append(round.make_json_obj())
+        return {"all_rounds": rounds_list}
 
 def encode_a_round(self, round):
-    return "{'time_started':'"+ str(self.time_started) +"', 'active':'"+str(self.active)+"', 'owner':'"+ self.owner +"', 'orders':" + str(self.orders) + "}"
+    return {'time_started':self.time_started, 'active': self.active, 'owner':self.owner , 'orders':self.orders}
 
-def decode_a_round(data):
+def make_a_round_from_string_values(active, time_started, owner, orders="{}"):
+    string_data = {}
+    string_data["active"] = active
+    string_data["time_started"] = time_started
+    string_data["owner"] = owner
+    string_data["orders"] = orders
+    return decode_a_round(string_data)
+
+
+def decode_a_round(self, data):
     owner = data["owner"]
     time_started = datetime.strptime(data["time_started"], "%d.%m.%y %H:%M:%S")
     active = (data["active"] == "True")
@@ -85,3 +93,6 @@ def decode_a_round(data):
 
     round = Round(owner, time_started, active)
     round.orders = orders
+
+    return round
+    

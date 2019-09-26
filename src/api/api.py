@@ -18,8 +18,8 @@ class RoundsHandler(BaseHTTPRequestHandler):
         rounds_data_manager = RoundsFileManager("data/rounds.csv")
         rounds = rounds_data_manager.get_rounds_from_file(people, drinks)
 
-        print(rounds.make_json_str())
-        jd = json.dumps(rounds.make_json_str())
+        print(rounds.make_json_obj())
+        jd = json.dumps(rounds.make_json_obj())
         self.wfile.write(jd.encode("utf-8"))
 
     def do_POST(self):
@@ -36,7 +36,7 @@ class RoundsHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
 if __name__ == "__main__":
-    server_address = ("", 8080)
+    server_address = ("0.0.0.0", 8080)
     httpd = HTTPServer(server_address, RoundsHandler)
     print("Starting server")
     httpd.serve_forever()
