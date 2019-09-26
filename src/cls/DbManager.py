@@ -40,7 +40,7 @@ class DbManager:
     
 class PeopleDbManager(DbManager):
         
-    def get_all_people(self, drinks):
+    def get_all_people(drinks):
         people = People()
         try:
             results = DbManager.execute_select(self, "SELECT person_name, drink_name FROM people LEFT JOIN drinks ON people.favourite_drink_id=drinks.drink_id")
@@ -54,15 +54,15 @@ class PeopleDbManager(DbManager):
 
         return people
 
-    def update_file(self, updated_people):
-        rows = []
-        for person in updated_people.all_people.values():
-            rows.append(person.make_csv_line())
-        FileManager.overwrite_file(self, rows)
+    # def update_file(self, updated_people):
+    #     rows = []
+    #     for person in updated_people.all_people.values():
+    #         rows.append(person.make_csv_line())
+    #     FileManager.overwrite_file(self, rows)
 
 class DrinksDbManager(DbManager):
 
-    def get_drinks_from_db(self):
+    def get_all_drinks():
         drinks = Drinks()
         try:
             results = DbManager.execute_select(self, "SELECT drink_name FROM drinks")
@@ -76,15 +76,15 @@ class DrinksDbManager(DbManager):
 
         return drinks
 
-    def update_file(self, updated_drinks):
-        rows = []
-        for drink in updated_drinks.all_drinks.values():
-            rows.append(drink.make_csv_line())
-        FileManager.overwrite_file(self, rows)
+    # def update_file(updated_drinks):
+    #     rows = []
+    #     for drink in updated_drinks.all_drinks.values():
+    #         rows.append(drink.make_csv_line())
+    #     FileManager.overwrite_file(self, rows)
 
 class RoundsDbManager:
 
-    def get_rounds_from_file(self, people, drinks):
+    def get_rounds_from_file(people, drinks):
         rounds = Rounds()
         rows = FileManager.read_file(self)
         for row in rows:
@@ -111,9 +111,28 @@ class RoundsDbManager:
                 print(row)
                 string_data = make_a_round_from_string_values(row[0], row[1], row[2])
                 rounds.add_round(string_data)
+        except:
+            # cry
+            pass
 
-    def update_file(self, updated_rounds):
-        rows = []
-        for round in updated_rounds.all_rounds:
-            rows.append(round.make_csv_line(FileManager.datetime_format))
-        FileManager.overwrite_file(self, rows)
+    # def update_file(updated_rounds):
+    #     rows = []
+    #     for round in updated_rounds.all_rounds:
+    #         rows.append(round.make_csv_line(FileManager.datetime_format))
+    #     FileManager.overwrite_file(rows)
+
+    def update_round(updated_round):
+        query = f"UPDATE rounds SET active={updated_round.active}"
+        return DbManager.execute_update_or_insert(query)
+
+
+    def add_round(new_round):
+        query = "INSERT INTO rounds ("
+        + "active, time_started, owner_id"
+        + ") VALUES ("
+        + f"{new_round.active}, "
+        + f"{new_round.time_started}, "
+        + f"SELECT person_id FROM people WHERE person_name={new_round.owner}))"
+        success =  (DbManager.execute_update_or_insert(query) == 1)
+
+        # for order in new_round.orders

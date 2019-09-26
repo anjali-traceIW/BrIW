@@ -123,6 +123,7 @@ class RoundsFileManager(FileManager):
                 # Of the format 'person_name:drink_name'
                 order = [x.strip().capitalize() for x in order.split(':')]
                 print(order)
+                print(drinks.all_drinks)
                 person = people.get_person(order[0])
                 drink = drinks.get_drink(order[1])
                 round.add_order(person, drink)

@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from src.cls.FileManager import *
+from src.cls.DbManager import *
 from src.cls.Round import *
 
 class RoundsHandler(BaseHTTPRequestHandler):
@@ -9,7 +10,7 @@ class RoundsHandler(BaseHTTPRequestHandler):
         self.send_header("Content-type","application/json")
         self.end_headers()
 
-    def do_GET(self):
+    def do_GET(self, RoundsDbManager):
         self._set_headers(200)
 
         people = PeopleFileManager("data/people.csv").get_people_from_file()
@@ -22,7 +23,7 @@ class RoundsHandler(BaseHTTPRequestHandler):
         jd = json.dumps(rounds.make_json_obj())
         self.wfile.write(jd.encode("utf-8"))
 
-    def do_POST(self):
+    def do_POST(self, RoundsDbManager):
         content_length = int(self.headers['Content-Length'])
         data = json.loads(self.rfile.read(content_length))
         print(data)
@@ -30,7 +31,7 @@ class RoundsHandler(BaseHTTPRequestHandler):
         round.orders = data["orders"]
         print(round)
 
-        # TODO: Save round
+        RoundsDbManager.add_round(round)
         
         self.send_response(201)
         self.end_headers()
