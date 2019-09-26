@@ -42,3 +42,15 @@ curl -X <request type> -H <header values> -d <"{json string}" or content file ad
 curl -X POST localhost:8080 -H "Content-Type:application/json" -d "{"First_name": "Bob", "Last_name":"The Builder"}" 
 ```
 
+## Hosting
+
+```bash
+# Does this ip addr exist on the network?
+ping <ip addr>
+
+curl <ip addr>:<port>
+curl <ip addr>:<port> | jq	# for pretty json responses
+curl 10.0.0.207:8080 | jq .[0]	# get the first entry of the resonse
+curl 10.0.0.207:8080 | jq .*.first_name	# every first name
+```
+
