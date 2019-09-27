@@ -16,8 +16,8 @@ class RoundsHandler(BaseHTTPRequestHandler):
         people = PeopleFileManager("data/people.csv").get_people_from_file()
         drinks = DrinksFileManager("data/drinks.csv").get_drinks_from_file()
 
-        rounds_data_manager = RoundsFileManager("data/rounds.csv")
-        rounds = rounds_data_manager.get_rounds_from_file(people, drinks)
+        rounds_data_manager = RoundsDbManager()
+        rounds = rounds_data_manager.get_all_rounds()
 
         print(rounds.make_json_obj())
         jd = json.dumps(rounds.make_json_obj())
@@ -36,8 +36,37 @@ class RoundsHandler(BaseHTTPRequestHandler):
         self.send_response(201)
         self.end_headers()
 
+class HtmlHandler(BaseHTTPRequestHandler):
+
+    def do_GET(self, DrinksDbManager=DrinksDbManager):
+        self.send_response(200)
+
+        drinks_data_manager = DrinksDbManager()
+        drinks = drinks_data_manager.get_all_drinks()
+
+        self.send_header("content-type", "text/html")
+        self.end_headers()
+        
+        # Produce the HTML
+        html_document = """
+            <!DOCTYPE html>
+            <html>
+            <body>
+                <p>Drinks</p>
+                <ul>
+            """
+        for drink_name in drinks.all_drinks.keys():
+            html_document += f"<li>{drink_name}</li>"
+        html_document += """
+                </ul>
+            </body>
+            </html>
+            """
+        self.wfile.write(html_document.encode('utf-8'))
+
 if __name__ == "__main__":
-    server_address = ("0.0.0.0", 8080)
-    httpd = HTTPServer(server_address, RoundsHandler)
+    server_address = ("0.0.0.0", 8081)
+    # httpd = HTTPServer(server_address, RoundsHandler)
+    httpd = HTTPServer(server_address, HtmlHandler)
     print("Starting server")
     httpd.serve_forever()
