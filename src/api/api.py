@@ -3,7 +3,7 @@ import json
 from src.cls.FileManager import *
 from src.cls.DbManager import *
 from src.cls.Round import *
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response, render_template
 
 app = Flask(__name__)
 
@@ -36,15 +36,15 @@ def create_a_round(RoundsDbManager=RoundsDbManager):
 
     return Response(response="Successfully added round.",status=200)
 
-@app.route("/pages", methods=["GET"])
-def get_drinks_html(self, DrinksDbManager=DrinksDbManager):
-    self.send_response(200)
+@app.route("/pages/drinks", methods=["GET"])
+def get_drinks_html(DrinksDbManager=DrinksDbManager):
+#     self.send_response(200)
 
     drinks_data_manager = DrinksDbManager()
     drinks = drinks_data_manager.get_all_drinks()
 
-    self.send_header("content-type", "text/html")
-    self.end_headers()
+    # self.send_header("content-type", "text/html")
+    # self.end_headers()
     
     # Produce the HTML
     html_document = """
@@ -62,6 +62,18 @@ def get_drinks_html(self, DrinksDbManager=DrinksDbManager):
         </html>
         """
     self.wfile.write(html_document.encode('utf-8'))
+
+@app.route("/pages/order-example", methods=["GET", "POST"])
+def person_form():
+    if request.method == "GET":     # Return the entry form
+        return render_template("order_form.html", title="Place an order")
+    elif request.method == "POST":  # Take user input, return the submitted form
+        person_name = request.form.get("person")
+        drink_name = request.form.get("drink")
+
+        # Do something wiht this information
+
+        return render_template("order_submitted.html", title="Submitted", person=person_name, drink=drink_name)
 
 if __name__ == "__main__":
     print("Starting server")
