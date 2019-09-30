@@ -38,7 +38,7 @@ class DbManager:
         )
         with connection.cursor() as db:
             db.execute(query, param)
-            return db.affected_rows()
+            return db.lastrowid()
     
 class PeopleDbManager(DbManager):
         
@@ -87,32 +87,37 @@ class DrinksDbManager(DbManager):
 class RoundsDbManager:
 
     def get_all_rounds(self):
-        rounds = Rounds()
+        rounds = []
         try: 
             results = DbManager.execute_select("SELECT active, time_started, person_name as owner_name FROM rounds JOIN people on person_id=owner_id;")
             for row in results:
                 print(row)
-                string_data = make_a_round_from_string_values(row[0], row[1], row[2])
-                rounds.add_round(string_data)
-        except:
-            # cry
-            pass
+                round = make_a_round_from_string_values(row[0], row[1], row[2])
+                rounds.append(round)
+        except Exception as e:
+            print(e)
+        return rounds
 
-    def update_round(self, updated_round):
+    # def get_round(self):
+
+
+    def update_round(updated_round):
         query = f"UPDATE rounds SET active={updated_round.active}"
         return DbManager.execute_update_or_insert(query)
 
 
-    def add_round(self, new_round):
-        query = "INSERT INTO rounds ("
-        + "active, time_started, owner_id"
-        + ") VALUES ("
-        + f"{new_round.active}, "
-        + f"{new_round.time_started}, "
-        + f"SELECT person_id FROM people WHERE person_name={new_round.owner}))"
-        success =  (DbManager.execute_update_or_insert(query) == 1)
+    def add_round(new_round):
+        query = f"INSERT INTO rounds (active, time_started, owner_id) VALUES (%s, %s, (SELECT person_id FROM people WHERE person_name=%s))"
+        param = ((new_round.get_active_as_int()), new_round.time_started, new_round.owner)
+        round_id = DbManager.execute_update_or_insert(query, param)
 
-        # for order in new_round.orders
+        # for person, drink in new_round.orders.items():
+        #     RoundsDbManager.add_order_to_round(round_id, (person, drink))
 
-    def add_order_to_round(self, round_id, order):
-        pass
+        return round_id
+
+    # def add_order_to_round(round_id, order):
+    #     print(f"order: {order}")
+    #     query=f"INSERT INTO orders (person_id, drink_id, round_id) VALUES ((SELECT person_id FROM people WHERE person_name=%s), (SELECT drink_id FROM drinks WHERE drink_name=%s), %s)"
+    #     param=(order[0], order[1], round_id)
+    #     DbManager.execute_update_or_insert(query, param)

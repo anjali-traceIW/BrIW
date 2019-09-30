@@ -101,7 +101,7 @@ class App:
     [8] View rounds                     |             /  / 
                                         |            (  /
     [E] Save & Exit                     \             y'
-                                        `-.._____..-'
+                                         `-.._____..-'
         """
         welcome = "Welcome to BrIW v0.1!"
         updated_people, updated_drinks, updated_rounds = False, False, False

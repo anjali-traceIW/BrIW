@@ -31,6 +31,11 @@ class Round:
     def get_drinks_names(self):
         return orders.values()
 
+    def get_active_as_int(self):
+        if self.active:
+            return 1
+        return 0
+
     def add_order(self, person, drink):
         if not isinstance(person, Person):
             raise TypeError(f"Round.add_order(): Expected a Person object, received a {type(person)} object instead.")
@@ -48,7 +53,7 @@ class Round:
         return table_maker.print_people_drinks(orders, ("Name", "Drink"))
 
     def make_json_obj(self):
-        return { 'time_started':str(self.time_started), 'active':self.active, 'owner':self.owner.name , 'orders':self.orders}
+        return { 'time_started':str(self.time_started), 'active':self.active, 'owner':self.owner , 'orders':self.orders}
 
 class Rounds:
 
@@ -79,9 +84,9 @@ class Rounds:
         return {"all_rounds": rounds_list}
 
 def encode_a_round(self, round):
-    return {'time_started':self.time_started, 'active': self.active, 'owner':self.owner , 'orders':self.orders}
+    return {'time_started':round.time_started, 'active': round.active, 'owner':round.owner , 'orders':round.orders}
 
-def make_a_round_from_string_values(active, time_started, owner, orders="{}"):
+def make_a_round_from_string_values(active, time_started, owner, orders="\{\}"):
     string_data = {}
     string_data["active"] = active
     string_data["time_started"] = time_started
@@ -89,11 +94,11 @@ def make_a_round_from_string_values(active, time_started, owner, orders="{}"):
     string_data["orders"] = orders
     return decode_a_round(string_data)
 
-def decode_a_round(self, data):
+def decode_a_round(data):
     owner = data["owner"]
-    time_started = datetime.strptime(data["time_started"], "%d.%m.%y %H:%M:%S")
+    time_started = data["time_started"]
     active = (data["active"] == "True")
-    orders = data["orders"].__dict__
+    orders = data["orders"]#.__dict__
 
     round = Round(owner, time_started, active)
     round.orders = orders
