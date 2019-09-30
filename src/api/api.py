@@ -38,13 +38,9 @@ def create_a_round(RoundsDbManager=RoundsDbManager):
 
 @app.route("/pages/drinks", methods=["GET"])
 def get_drinks_html(DrinksDbManager=DrinksDbManager):
-#     self.send_response(200)
 
     drinks_data_manager = DrinksDbManager()
     drinks = drinks_data_manager.get_all_drinks()
-
-    # self.send_header("content-type", "text/html")
-    # self.end_headers()
     
     # Produce the HTML
     html_document = """
@@ -61,7 +57,7 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
         </body>
         </html>
         """
-    self.wfile.write(html_document.encode('utf-8'))
+    return html_document
 
 @app.route("/pages/order-example", methods=["GET", "POST"])
 def person_form():
