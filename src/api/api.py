@@ -9,8 +9,6 @@ app = Flask(__name__)
 
 @app.route("/rounds", methods=["GET"])
 def get_all_rounds(RoundsDbManager=RoundsDbManager):
-#       people = service.get_all_people()
-#   return jsonify([person.to_json() for person in people])
 
     people = PeopleFileManager("data/people.csv").get_people_from_file()
     drinks = DrinksFileManager("data/drinks.csv").get_drinks_from_file()
@@ -30,11 +28,16 @@ def create_a_round(RoundsDbManager=RoundsDbManager):
     print(round)
 
     try:
-        RoundsDbManager.add_round(round)
+        round_id = RoundsDbManager.add_round(round)
     except Exception as e:
         return Response(response=e,status=500)
 
-    return Response(response="Successfully added round.",status=200)
+    return Response(response=f"Successfully added round id {round_id}.",status=200)
+
+@app.route("/people", methods=["GET"])
+def get_all_people(PeopleDbManager=PeopleDbManager):
+    people = PeopleDbManager.get_all_people()
+    return jsonify([person.to_json() for person in people])
 
 @app.route("/pages/drinks", methods=["GET"])
 def get_drinks_html(DrinksDbManager=DrinksDbManager):

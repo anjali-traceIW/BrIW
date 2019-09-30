@@ -29,6 +29,7 @@ class DbManager:
         return results
 
     def execute_update_or_insert(query, param=tuple()):
+        print("Setting database connection")
         connection = pymysql.connect(
             hostname,
             username,
@@ -37,8 +38,14 @@ class DbManager:
             autocommit=True
         )
         with connection.cursor() as db:
+            print("About to execute query...")
             db.execute(query, param)
-            return db.lastrowid()
+            print("Executed query")
+            try:
+                db.lastrowid
+            except Exception as e:
+                print(e)
+            return db.lastrowid
     
 class PeopleDbManager(DbManager):
         
@@ -108,8 +115,10 @@ class RoundsDbManager:
 
     def add_round(new_round):
         query = f"INSERT INTO rounds (active, time_started, owner_id) VALUES (%s, %s, (SELECT person_id FROM people WHERE person_name=%s))"
-        param = ((new_round.get_active_as_int()), new_round.time_started, new_round.owner)
+        param = (new_round.get_active_as_int(), new_round.time_started, new_round.owner)
+        
         round_id = DbManager.execute_update_or_insert(query, param)
+        print(f"Inserted round {round_id}")
 
         # for person, drink in new_round.orders.items():
         #     RoundsDbManager.add_order_to_round(round_id, (person, drink))
