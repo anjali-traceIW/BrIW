@@ -1,35 +1,35 @@
 <script>
-    function whenClicked() {
-        personInput = document.getElementById("person")
-        drinkInput = document.getElementById("drink")
-        successText = document.getElementById("success-text")
-        invalidText = document.getElementById("invalid-text")
+    function whenClicked(ev) {
+        ev.preventDefault();
+        console.log("I'm executing!!")
 
-        letters = /^[A-Za-z]+$/
+        const personInput = document.getElementById("person")
+        const drinkInput = document.getElementById("drink")
+        let invalidText = document.getElementById("invalid-text")
+
+        const letters = /^[A-Za-z]+$/
 
         if (personInput.value != "" && personInput.value.match(letters)
             && drinkInput.value != "" && drinkInput.value.match(letters)) {
-            // This is good
-            successText.style.display = "block"
-            invalidText.style.display = "none"
-        } else if (personInput.value == "" && drinkInput.value == "") {
-            // This is empty
-            successText.stlye.display = "none"
-            invalidText.style.display = "none"
+            const form = docmuent.getElementById("order-form")
+            form.submit()
+        // } else if (personInput.value == "" && drinkInput.value == "") {
+        //     // This is empty
+        //     invalidText.style.display = "none"
         } else { 
             // This is bad
-            successText.stlye.display = "none"
             invalidText.style.display = "block"
         }
+        submitButton = document.getElementById("btn-submit");
+    submitButton.addEventListener("click", whenClicked);
     }
 </script>
 <h1>Place an order</h1>
-<form method="POST" action="/pages/order-example">
+<form method="POST" id="order-form" action="/pages/order-example">
     <label for="person">Person:</label> 
     <input type="text" id ="person" name="person"><br>
     <label for="drink">Drink:</label> 
     <input type="text" id ="drink" name="drink"><br>
-    <button onClick="whenClicked()" type="submit">Submit</button><br>
+    <input type="submit" id="btn-submit" value="Submit"><br>
     <p id="invalid-text" style="display: none;">Invalid person or drink supplied.</p>
-    <p id="success-text" style="display: none;">Successfully added person and drink.</p>
 </form>
