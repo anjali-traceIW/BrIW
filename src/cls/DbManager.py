@@ -29,7 +29,6 @@ class DbManager:
         return results
 
     def execute_update_or_insert(query, param=tuple()):
-        print("Setting database connection")
         connection = pymysql.connect(
             hostname,
             username,
@@ -38,13 +37,7 @@ class DbManager:
             autocommit=True
         )
         with connection.cursor() as db:
-            print("About to execute query...")
             db.execute(query, param)
-            print("Executed query")
-            try:
-                db.lastrowid
-            except Exception as e:
-                print(e)
             return db.lastrowid
     
 class PeopleDbManager(DbManager):
@@ -93,40 +86,66 @@ class DrinksDbManager(DbManager):
 
 class RoundsDbManager:
 
-    def get_all_rounds(self):
-        rounds = []
-        try: 
-            results = DbManager.execute_select("SELECT active, time_started, person_name as owner_name FROM rounds JOIN people on person_id=owner_id;")
-            for row in results:
-                print(row)
-                round = make_a_round_from_string_values(row[0], row[1], row[2])
-                rounds.append(round)
+    def get_orders_for_a_round(self, round_id):
+        orders = {}
+        # Could this be shorter? I don't think this cold be shorter.
+        query = "SELECT person_name, drink_name FROM drinks JOIN (SELECT person_name, drink_id FROM people JOIN (SELECT person_id, drink_id FROM orders WHERE round_id = %s) AS order_info ON people.person_id=order_info.person_id) AS person_drink_id ON drinks.drink_id=person_drink_id.drink_id"
+        try:
+            results = DbManager.execute_select(query, (round_id))
         except Exception as e:
             print(e)
+        for row in results:
+            orders[row[0]] = row[1]  # This is stupid
+        return orders
+
+    def get_all_rounds(self):
+        rounds = []
+        # try: 
+        results = DbManager.execute_select("SELECT round_id, active, time_started, person_name FROM rounds JOIN people on person_id=owner_id;")
+        for row in results:
+            print(row)
+            round = Round(owner=row[3], time_started=row[2], active=(row[1] == 1))
+            # round = make_a_round_from_string_values(row[1], row[2], row[3])
+            orders = self.get_orders_for_a_round(row[0])
+            print(f"Orders: {orders}")
+            round.orders = orders
+            print(round)
+            rounds.append(round)
+        # except Exception as e:
+        #     print(f"get_all_rounds: {e}")
+        
         return rounds
 
-    # def get_round(self):
+    def get_round(self, round_id):
+        query = "SELECT active, time_started, person_name FROM rounds JOIN people on person_id=owner_id WHERE round_id=%s;"
+        try: 
+            result = DbManager.execute_select(query, (round_id))[0] # Returns a tuple (single result)
+        except Exception as e:
+            print(e)
 
+        return Round(result[2], result[1], result[0])
 
     def update_round(updated_round):
         query = f"UPDATE rounds SET active={updated_round.active}"
-        return DbManager.execute_update_or_insert(query)
-
+        try:
+            return DbManager.execute_update_or_insert(query)
+        except Exception as e:
+            print(e)
 
     def add_round(new_round):
-        query = f"INSERT INTO rounds (active, time_started, owner_id) VALUES (%s, %s, (SELECT person_id FROM people WHERE person_name=%s))"
-        param = (new_round.get_active_as_int(), new_round.time_started, new_round.owner)
+        query = f"INSERT INTO rounds (active, time_started, owner_id) VALUES (%s, CURRENT_TIMESTAMP, (SELECT person_id FROM people WHERE person_name=%s))"
+        param = (new_round.get_active_as_int(), new_round.owner)
         
         round_id = DbManager.execute_update_or_insert(query, param)
         print(f"Inserted round {round_id}")
 
-        # for person, drink in new_round.orders.items():
-        #     RoundsDbManager.add_order_to_round(round_id, (person, drink))
-
+        for person, drink in new_round.orders.items():
+            order_id = RoundsDbManager.add_order_to_round(round_id, (person, drink))
+            
         return round_id
 
-    # def add_order_to_round(round_id, order):
-    #     print(f"order: {order}")
-    #     query=f"INSERT INTO orders (person_id, drink_id, round_id) VALUES ((SELECT person_id FROM people WHERE person_name=%s), (SELECT drink_id FROM drinks WHERE drink_name=%s), %s)"
-    #     param=(order[0], order[1], round_id)
-    #     DbManager.execute_update_or_insert(query, param)
+    def add_order_to_round(round_id, order):
+        print(f"order: {order}")
+        query=f"INSERT INTO orders (person_id, drink_id, round_id) VALUES ((SELECT person_id FROM people WHERE person_name=%s), (SELECT drink_id FROM drinks WHERE drink_name=%s), %s)"
+        param=(order[0], order[1], round_id)
+        return DbManager.execute_update_or_insert(query, param)

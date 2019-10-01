@@ -1,1 +1,10 @@
-<h1>Successfully placed an order of {{drink}} for {{person}}</h1>
+<h1>
+    Successfully placed an order 
+    {% if drink %}
+    of {{drink}} 
+    {% endif %}
+    {% if person %}
+    for {{person}}
+    {% endif %}
+</h1>
+<!-- jinja -->
