@@ -1,35 +1,35 @@
-<script>
-    function whenClicked(ev) {
-        ev.preventDefault();
-        console.log("I'm executing!!")
 
-        const personInput = document.getElementById("person")
-        const drinkInput = document.getElementById("drink")
-        let invalidText = document.getElementById("invalid-text")
-
-        const letters = /^[A-Za-z]+$/
-
-        if (personInput.value != "" && personInput.value.match(letters)
-            && drinkInput.value != "" && drinkInput.value.match(letters)) {
-            const form = docmuent.getElementById("order-form")
-            form.submit()
-        // } else if (personInput.value == "" && drinkInput.value == "") {
-        //     // This is empty
-        //     invalidText.style.display = "none"
-        } else { 
-            // This is bad
-            invalidText.style.display = "block"
-        }
-        submitButton = document.getElementById("btn-submit");
-    submitButton.addEventListener("click", whenClicked);
-    }
-</script>
 <h1>Place an order</h1>
 <form method="POST" id="order-form" action="/pages/order-example">
     <label for="person">Person:</label> 
     <input type="text" id ="person" name="person"><br>
     <label for="drink">Drink:</label> 
     <input type="text" id ="drink" name="drink"><br>
-    <input type="submit" id="btn-submit" value="Submit"><br>
+    <input id="btn-submit" type="submit" value="Submit"><br>
     <p id="invalid-text" style="display: none;">Invalid person or drink supplied.</p>
 </form>
+<script>
+        function whenClicked(ev) {
+            ev.preventDefault();
+            console.log("I'm executing!!")
+    
+            const personInput = document.getElementById("person")
+            const drinkInput = document.getElementById("drink")
+            let invalidText = document.getElementById("invalid-text")
+    
+            const letters = /^[A-Za-z]+$/
+    
+            if (personInput.value != "" && personInput.value.match(letters)
+                && drinkInput.value != "" && drinkInput.value.match(letters)) {
+                const form = docmuent.getElementById("order-form")
+                form.submit()
+            // } else if (personInput.value == "" && drinkInput.value == "") {
+            //     // This is empty
+            //     invalidText.style.display = "none"
+            } else { 
+                // This is bad
+                invalidText.style.display = "block"
+            }
+        }
+        document.querySelector("#btn-submit").addEventListener("click", whenClicked);
+    </script>
