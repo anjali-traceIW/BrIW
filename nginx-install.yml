@@ -1,0 +1,30 @@
+- hosts: ec2
+  tasks:
+    - name: ensure nginx is at the latest version
+      apt: name=nginx state=latest update_cache=yes
+      become: yes
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+      become: yes
+    - name: make a directory for web files in www
+      file:
+        path: /var/www/html/view/
+        state: directory
+      become: yes
+    - name: copy the other web files to www/view
+      copy:
+        src: ~/Documents/practice/view/
+        dest: /var/www/html/view/
+      become: yes
+    - name: copy the index file to www
+      copy:
+        src: ~/Documents/practice/index.html
+        dest: /var/www/html/index.html
+      become: yes
+    - name: restart nginx
+      service:
+        name=nginx
+        state=restarted
+      become: yes
