@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The amazing BrIW</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body background="img/sparkle.gif">
+        <h1 class="header centering">BrIW v0.1</h1>
+        <p>Enter your favourite drinks. Receive a beverage from your nearest colleague.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Drink</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name, drink in orders.items() %}
+                <tr>
+                    <tb>{{name}}</tb><tb>{{drink}}</tb>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <tb><input type="text" id="input-name"></tb>
+                    <tb><input type="text" id="input-drink"><button onClick="addOrder">Add</button></tb>
+                </tr>
+            </tbody>
+        </table>
+        <button onClick="onSubmit">Submit round</button>
+        <script>
+            function onOrder(ev) {
+                name = document.querySelector("#input-name").value
+                drink = document.querySelector("#input-drink").value
+                orders[name] = drink
+            }
+
+            function onSubmit(ev) {
+                // post orders
+            }
+
+            // orders = {}
+            orders = {"Jojo": "Hot chocolate"}
+            
+        </script>
+    </body>
+</html>
