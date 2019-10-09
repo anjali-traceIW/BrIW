@@ -12,26 +12,38 @@
 </head>
 <body>
     <div class="container-fluid">
-        <h1 align="center">Place an order</h1>
-
         <div class="row">
+            <div class="col-12 btn-group justify-content-center">
+                <button class="button">Home</button>
+                <button class="button">People</button>
+                <button class="button">Drinks</button>
+                <button class="button">Rounds</button>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <h1>Place an order</h1><br>
+        </div>
         <form method="POST" id="order-form" action="/pages/order-example">
-            <div class="row">
-                <div class="col">
-                    <label for="person">Person:</label></br
+            <div class="row justify-content-center">
+                <div class="col-xs-2" align="right">
+                    <label for="person">Person:</label></br>
                     <label for="drink">Drink:</label> 
                 </div>
-                <div class="col">
+                <div class="col-xs-3">
                     <input type="text" id="person" name="person"><br>
-                    <input type="text" id="drink" name="drink"><br>
+                    <input type="text" id="drink" name="drink">
                 </div>
             </div>
-
-            <input id="btn-submit" type="submit" value="Submit"><br>
-            <p id="invalid-text" style="display: none; color: red">Invalid person or drink supplied.</p>
-            <p id="empty-text" style="display: none;">Cannot make an empty request.</p>
+            <br>
+            <div class="row content-centre">
+                <input class="button" id="btn-submit" type="submit" value="Submit">
+            </div>
+            <div class="row justify-content-center">
+                <p id="invalid-text">Invalid person or drink supplied.</p>
+                <p id="empty-text">Cannot make an empty request.</p>
+            </div>
         </form>
-    </div>
     </div>
 
     <script>

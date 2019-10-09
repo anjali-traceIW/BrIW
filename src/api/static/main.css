@@ -1,3 +1,47 @@
-.header {
-    
+body {
+    background: #f8f8fa
+}
+
+label {
+    margin-right: 8px;
+}
+
+input {
+    margin-bottom: 8px;
+}
+
+.button {
+    background-color: #d2d4dc;
+}
+
+.content-centre {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-group {
+    background-color: #424553;
+}
+
+.btn-group .button {
+    background-color: #424553; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    /* display: inline-block; */
+    font-size: 16px;
+    cursor: pointer;
+    float: left;
+    margin: 0px;
+}
+
+#invalid-text {
+    display: none; 
+    color: red
+}
+
+#empty-text {
+    display: none;
 }
