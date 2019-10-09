@@ -1,35 +1,62 @@
-<h1>Place an order</h1>
-<form method="POST" id="order-form" action="/pages/order-example">
-    <label for="person">Person:</label> 
-    <input type="text" id ="person" name="person"><br>
-    <label for="drink">Drink:</label> 
-    <input type="text" id ="drink" name="drink"><br>
-    <input id="btn-submit" type="submit" value="Submit"><br>
-    <p id="invalid-text" style="display: none; color: red">Invalid person or drink supplied.</p>
-    <p id="empty-text" style="display: none;">Cannot make an empty request.</p>
-</form>
-<script>
-    function whenClicked(ev) {
-        ev.preventDefault();
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        const personInput = document.getElementById("person")
-        const drinkInput = document.getElementById("drink")
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   
+    <!-- My CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+    <title>Flask app</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 align="center">Place an order</h1>
 
-        const letters = /([A-Za-z]*\s)*/
+        <div class="row">
+        <form method="POST" id="order-form" action="/pages/order-example">
+            <div class="row">
+                <div class="col">
+                    <label for="person">Person:</label></br
+                    <label for="drink">Drink:</label> 
+                </div>
+                <div class="col">
+                    <input type="text" id="person" name="person"><br>
+                    <input type="text" id="drink" name="drink"><br>
+                </div>
+            </div>
 
-        if (personInput.value != "" && personInput.value.match(letters)
-            && drinkInput.value != "" && drinkInput.value.match(letters)) {
-            const form = document.getElementById("order-form")
-            form.submit()
-        } else if (personInput.value == "" && drinkInput.value == "") {
-            // This is empty
-            document.querySelector("#invalid-text").style.display = "none"
-            document.querySelector("#empty-text").style.display = "block"
-        } else { 
-            // This is bad
-            document.querySelector("#invalid-text").style.display = "block"
-            document.querySelector("#empty-text").style.display = "none"
+            <input id="btn-submit" type="submit" value="Submit"><br>
+            <p id="invalid-text" style="display: none; color: red">Invalid person or drink supplied.</p>
+            <p id="empty-text" style="display: none;">Cannot make an empty request.</p>
+        </form>
+    </div>
+    </div>
+
+    <script>
+        function whenClicked(ev) {
+            ev.preventDefault();
+
+            const personInput = document.getElementById("person")
+            const drinkInput = document.getElementById("drink")
+
+            const letters = /([A-Za-z]*\s)*/
+
+            if (personInput.value != "" && personInput.value.match(letters)
+                && drinkInput.value != "" && drinkInput.value.match(letters)) {
+                const form = document.getElementById("order-form")
+                form.submit()
+            } else if (personInput.value == "" && drinkInput.value == "") {
+                // This is empty
+                document.querySelector("#invalid-text").style.display = "none"
+                document.querySelector("#empty-text").style.display = "block"
+            } else { 
+                // This is bad
+                document.querySelector("#invalid-text").style.display = "block"
+                document.querySelector("#empty-text").style.display = "none"
+            }
         }
-    }
-    document.querySelector("#btn-submit").addEventListener("click", whenClicked);
-</script>
+        document.querySelector("#btn-submit").addEventListener("click", whenClicked);
+    </script>
+</body>
