@@ -6,20 +6,17 @@ from datetime import datetime
 
 class Round:
 
-    def __init__(self, owner, time_started, active=False):
+    def __init__(self, owner, time_started, active=False, id=None):
+        # ID can be empty, e.g. if making a round which hasn't yet been written to the db.
         print("Making round...")
-        # if isinstance(owner, str):
         self.owner = owner
-        # else: # isinstance(owner, type(Person)):
-        #     self.owner = owner.name
-        # else:
-        #     raise TypeError(f"Expected Person object or string person name to create a round. Recieved {type(owner)}")
         self.orders = {}
         self.time_started = time_started
         self.active = active
+        self.id = id
 
     def __str__(self):
-        round_text = f"Round started by {self.owner} at {self.time_started}: \n\n"
+        round_text = f"Round {self.id} started by {self.owner} at {self.time_started}: \n\n"
         round_table = PrettyTable(["Person", "Drink"])
         for name, drink in self.orders.items():
             round_table.add_row([name, drink])

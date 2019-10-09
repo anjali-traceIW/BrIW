@@ -109,9 +109,17 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
         """
     return html_document
 
+@app.route("/pages/rounds", methods=["GET"])
+def show_rounds():
+    rounds = RoundsDbManager.get_all_rounds()
+    return render_template("view_rounds.html", title="View all rounds", rounds=rounds)
+
 @app.route("/pages/order", methods=["GET", "POST"])
 def order_form():
+    round_id = request.args.get("round_id")
+    # print(round_id)
     if request.method == "GET":     # Return the entry form
+        round = RoundsDbManager.get_round(round_id)
         people = PeopleDbManager.get_all_people()
         drinks = DrinksDbManager.get_all_drinks()
         return render_template("order_form.html", title="Place an order", people=people, drinks=drinks)

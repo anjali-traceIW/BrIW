@@ -111,8 +111,8 @@ class RoundsDbManager(DbManager):
         try: 
             results = DbManager.execute_select("SELECT round_id, active, time_started, person_name FROM rounds JOIN people on person_id=owner_id;")
             for row in results:
-                round = Round(owner=row[3], time_started=row[2], active=(row[1] == 1))
-                orders = DbManager.get_orders_for_a_round(row[0])
+                round = Round(owner=row[3], time_started=row[2], active=(row[1] == 1), id=row[0])
+                orders = RoundsDbManager.get_orders_for_round(row[0])
                 round.orders = orders
                 rounds.append(round)
         except Exception as e:
@@ -124,7 +124,7 @@ class RoundsDbManager(DbManager):
         query = "SELECT active, time_started, person_name FROM rounds JOIN people on person_id=owner_id WHERE round_id=%s;"
         try: 
             result = DbManager.execute_select(query, (round_id))[0] # Returns a tuple (single result)
-            round = Round(result[2], result[1], result[0])
+            round = Round(owner=result[2], time_started=result[1], active=result[0], id=round_id)
         except Exception as e:
             print(e)
         return round

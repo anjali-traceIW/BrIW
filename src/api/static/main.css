@@ -14,6 +14,21 @@ select {
     width: 135px;
 }
 
+th {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right:20px;
+    background-color: #424553;
+    color: white;
+}
+
+td {
+    padding-left: 10px;
+    padding-right:20px;
+    padding-bottom: 5px;
+}
+
 .button {
     background-color: #d2d4dc;
 }
@@ -28,7 +43,7 @@ select {
 }
 
 .btn-group .button {
-    background-color: #424553; /* Green */
+    background-color: #424553;
     border: none;
     color: white;
     padding: 15px 32px;
