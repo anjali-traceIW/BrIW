@@ -33,14 +33,18 @@
                     <label for="drink">Drink:</label> 
                 </div>
                 <div class="col-xs-3">
-                    <!-- <input type="text" id="person" name="person"> -->
-                    <select id="person" name="person">
+                    <select id="person" name="person" onchange="listDrinks">
                         {% for person in people %}
                         <option value="{{person.name}}">{{person.name}}</option>
                         {% endfor %}
                     </select>
                     <br>
-                    <input type="text" id="drink" name="drink">
+                    <!-- <input type="text" id="drink" name="drink"> -->
+                    <select id="drink" name="drink">
+                        {% for drink in drinks %}
+                        <option value="{{drink.name}}">{{drink.name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <br>
@@ -92,7 +96,15 @@
         }
 
         // Get people
-        requestContent("GET", "/people")
+        people = requestContent("GET", "/people")
+
+        function listDrinks() {
+            person = document.querySelector("#person").value
+
+            // Show drinks selector
+
+            // Star next to selected person's favourite drink (which we should know!)
+        }
 
     </script>
 </body>
