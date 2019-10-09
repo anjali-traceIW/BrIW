@@ -44,9 +44,32 @@
                 </tbody>
             </table>
         </div>
+        <br>
+        {% if updated %}
+        <p style="color:green;">Successfully made a new drink.</p>
+        {% endif %}
+        <form method="POST" id="drink-form" action="/pages/drinks?"+round_id>
+            <div class="row justify-content-center">
+                <h2>Add a new drink</h2>
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-sm-2" align="right">
+                    <label for="name">name:</label><br>
+                    <label for="temperature">temperature:</label>
+                </div>
+                <div class="col-sm-3" align="left">
+                    <input id="name-input" type="text"><br>
+                    <select id="temperature-input" name="temperature">
+                        <option value="Hot">Hot</option>
+                        <option value="Iced">Iced</option>
+                        <option value="As Expected">As Expected</option>   // e.g. for wine. This will definitely become weird.
+                    </select>
+                </div>
+            </div>
+        </form>
     </div>
 
     <script>
-
     </script>
 </body>

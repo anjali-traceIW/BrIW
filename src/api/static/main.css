@@ -6,6 +6,11 @@ label {
     margin-right: 8px;
 }
 
+input {
+    background-color: #ffffff;
+    border: 1px solid #aaa;
+}
+
 select {
     margin-top: 2px;
     margin-bottom: 9px;
