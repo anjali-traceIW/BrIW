@@ -120,9 +120,13 @@ def order_form():
     # print(round_id)
     if request.method == "GET":     # Return the entry form
         round = RoundsDbManager.get_round(round_id)
+        round.orders = RoundsDbManager.get_orders_for_round(round_id)
         people = PeopleDbManager.get_all_people()
         drinks = DrinksDbManager.get_all_drinks()
-        return render_template("order_form.html", title="Place an order", people=people, drinks=drinks)
+
+        print(round.orders)
+
+        return render_template("order_form.html", title="Place an order", people=people, drinks=drinks, round=round)
     elif request.method == "POST":  # Take user input, return the submitted form
         person_name = request.form.get("person")
         drink_name = request.form.get("drink")
