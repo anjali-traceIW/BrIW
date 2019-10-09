@@ -35,7 +35,16 @@ def create_a_round(RoundsDbManager=RoundsDbManager):
     except Exception as e:
         return Response(response=e,status=500)
 
-    return Response(response=f"Successfully added round id {round_id}.",status=200)
+    return Response(response=f"Successfully added round {round_id}.", status=201)
+
+@app.route("/round", methods=["PATCH"])
+def place_an_order(RoundsDbManager=RoundsDbManager):
+    data = request.get_json()
+    round_id = data["round_id"]
+    order = (data["name"], data["drink"])
+    new_order_id = RoundsDbManager.create_order_for_round(round_id, order)
+
+    return Response(response=f"Successfully added order {new_order_id} to round {round_id}", status=200)
 
 # ============== PEOPLE ==============
 
@@ -55,7 +64,7 @@ def add_person(PeopleDbManager=PeopleDbManager):
     data = request.get_json()
     person = Person(data["name"], data["favourite_drink"])
     new_person_id = PeopleDbManager.create_person(person)
-    return Response(response=f"Successfully created person id {new_person_id}", status=200)
+    return Response(response=f"Successfully created person with id {new_person_id}", status=201)
 
 # ============== DRINKS ==============
 
@@ -75,7 +84,7 @@ def add_drink(DrinksDbManager=DrinksDbManager):
     data = request.get_json()
     drink = Drink(data["name"], data["temperature"])
     new_drink_id = DrinksDbManager.create_drink(drink)
-    return Response(response=f"Successfully created drink id {new_drink_id}", status=200)
+    return Response(response=f"Successfully created drink with id {new_drink_id}", status=201)
 
 # ============== PAGES ==============
 
