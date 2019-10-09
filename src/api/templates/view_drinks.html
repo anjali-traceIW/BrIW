@@ -8,7 +8,7 @@
    
     <!-- My CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
-    <title>Rounds</title>
+    <title>Drinks</title>
 </head>
 <body>
     <div class="container-fluid">
@@ -23,34 +23,22 @@
         <br>
         
         <div class="row justify-content-center">
-            <h1>All Rounds</h1><br>
+            <h1>All Drinks</h1><br>
         </div>
         <br>
         <div class="row justify-content-center">
             <table> 
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Started</th>
-                        <th>Owner</th>
-                        <th>Active</th>
-                        <th></th>
+                        <th>Drink name</th>
+                        <th>Temperature</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for round in rounds %}
+                    {% for drink in drinks %}
                     <tr>
-                        <td>{{round.id}}</td>
-                        <td>{{round.time_started}}</td>
-                        <td>{{round.owner}}</td>
-                        <td>
-                            {% if round.active == True %}
-                            Yes
-                            {% else %}
-                            No
-                            {% endif %}
-                        </td>
-                        <td style="text-align:center"><a href="order?round_id={{round.id}}">>></a></td>
+                        <td>{{drink.name}}</td>
+                        <td>{{drink.temperature}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

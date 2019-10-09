@@ -88,7 +88,7 @@ def add_drink(DrinksDbManager=DrinksDbManager):
 
 # ============== PAGES ==============
 
-@app.route("/pages/drinks", methods=["GET"])
+@app.route("/pages/drinks-test", methods=["GET"])
 def get_drinks_html(DrinksDbManager=DrinksDbManager):
     drinks = DrinksDbManager.get_all_drinks()
     
@@ -108,6 +108,16 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
         </html>
         """
     return html_document
+
+@app.route("/pages/people", methods=["GET"])
+def show_people():
+    people = PeopleDbManager.get_all_people()
+    return render_template("view_people.html", title="View all people", people=people)
+
+@app.route("/pages/drinks", methods=["GET"])
+def show_drinks():
+    drinks = DrinksDbManager.get_all_drinks()
+    return render_template("view_drinks.html", title="View all drinks", drinks=drinks)
 
 @app.route("/pages/rounds", methods=["GET"])
 def show_rounds():
