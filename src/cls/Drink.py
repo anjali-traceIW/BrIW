@@ -1,7 +1,10 @@
 class Drink:
 
     def __init__(self, name, temp=""):
-        self.name = name.strip().capitalize()
+        if name is not None:    # Can have an empty drink (e.g. when making a person with no favourite drink)
+            self.name = name.strip().capitalize()
+        else:
+            self.name = ""
         self.temperature = temp
 
     def __eq__(self, other_drink):
@@ -10,9 +13,9 @@ class Drink:
     def make_csv_line(self):
         return f"{self.name},{self.temperature}"
 
-    def make_json_str(self):
+    def to_json(self):
         # json_str = '{ "name":"John", "age":30, "city":"New York"}'
-        return "{ 'drink_name':'" + self.name + "', 'temperature':'" + self.temperature +"'}"
+        return { "drink_name": self.name, "temperature": self.temperature }
 
 class Drinks:
 

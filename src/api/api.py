@@ -22,7 +22,7 @@ def get_round(RoundsDbManager=RoundsDbManager):
 
     round = RoundsDbManager.get_round(round_id)
 
-    return jsonify(round)
+    return jsonify(round.make_json_obj())
 
 @app.route("/rounds", methods=["POST"])
 def create_a_round(RoundsDbManager=RoundsDbManager):
@@ -48,7 +48,7 @@ def get_all_people(PeopleDbManager=PeopleDbManager):
 def get_person(PeopleDbManager=PeopleDbManager):
     person_id = request.args.get("person_id")
     person = PeopleDbManager.get_person(person_id)
-    return jsonify(person)
+    return jsonify(person.to_json())
 
 @app.route("/person", methods=["POST"])
 def add_person(PeopleDbManager=PeopleDbManager):
@@ -68,7 +68,7 @@ def get_all_drinks(DrinksDbManager=DrinksDbManager):
 def get_drink(DrinksDbManager=DrinksDbManager):
     drink_id = request.args.get("drink_id")
     drink = DrinksDbManager.get_drink(drink_id)
-    return jsonify(drink)
+    return jsonify(drink.to_json())
 
 @app.route("/drink", methods=["POST"])
 def add_drink(DrinksDbManager=DrinksDbManager):
@@ -91,8 +91,8 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
             <p>Drinks</p>
             <ul>
         """
-    for drink_name in drinks.all_drinks.keys():
-        html_document += f"<li>{drink_name}</li>"
+    for drink in drinks:
+        html_document += f"<li>{drink.name}</li>"
     html_document += """
             </ul>
         </body>

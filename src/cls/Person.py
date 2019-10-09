@@ -3,7 +3,10 @@ from src.cls.Drink import Drink
 class Person:
 
     def __init__(self, name, fav_drink=Drink("")):
-        self.name = name.strip().capitalize()
+        if name is not None:
+            self.name = name.strip().capitalize()
+        else:
+            self.name = ""
         if not isinstance(fav_drink, Drink):
             raise TypeError(f"Expected Drink object for favourite drink, received {type(fav_drink)}")
         self.favourite_drink = fav_drink
@@ -13,6 +16,9 @@ class Person:
 
     def make_csv_line(self):
         return f"{self.name},{self.favourite_drink.name}"
+
+    def to_json(self):
+        return {"name": self.name, "favourite_drink": self.favourite_drink.name}
 
 class People:
 

@@ -9,7 +9,7 @@ from datetime import datetime
 class DbManager:
     datetime_format = "%d.%m.%y %H:%M:%S"
 
-    def execute_select(self, query, param=tuple()):
+    def execute_select(query, param=tuple()):
         connection = pymysql.connect(
             hostname,
             username,
@@ -23,7 +23,7 @@ class DbManager:
             results = db.fetchall()
         return results
 
-    def execute_update_or_insert(self, query, param=tuple()):
+    def execute_update_or_insert(query, param=tuple()):
         connection = pymysql.connect(
             hostname,
             username,
@@ -46,12 +46,12 @@ class PeopleDbManager(DbManager):
                 people.append(Person(row[0], Drink(row[1])))
         except Exception as e:
             # TODO: improve this sad message
-            print("Something went wrong...")
+            print("Something went wrong getting all people from the database...")
             print(e)
         return people
 
     def get_person(person_id):
-        person = Person()
+        person = Person("")
         query = "SELECT person_name, drink_name FROM people JOIN drinks ON favourite_drink_id = drink_id WHERE person_id=%s"
         try: 
             results = DbManager.execute_select(query, (person_id))
@@ -81,12 +81,12 @@ class DrinksDbManager(DbManager):
                 drinks.append(Drink(row[0]))
         except Exception as e:
             # TODO: improve this sad message
-            print("Something went wrong...")
+            print("Something went wrong getting all drinks from the database...")
             print(e)
         return drinks
 
     def get_drink(drink_id):
-        drink = Drink()
+        drink = Drink("")
         try: 
             result = DbManager.execute_select("SELECT drink_name FROM drinks WHERE drink_id=%s", (drink_id))[0]     # Only one result to be returned.
             drink = Drink(result[0])
@@ -120,7 +120,7 @@ class RoundsDbManager(DbManager):
         return rounds
 
     def get_round(round_id):
-        round = Round()
+        round = Round("", "")
         query = "SELECT active, time_started, person_name FROM rounds JOIN people on person_id=owner_id WHERE round_id=%s;"
         try: 
             result = DbManager.execute_select(query, (round_id))[0] # Returns a tuple (single result)
@@ -138,6 +138,8 @@ class RoundsDbManager(DbManager):
             # print(f"Inserted round {round_id}")
             for person, drink in new_round.orders.items():
                 order_id = RoundsDbManager.add_order_to_round(round_id, (person, drink))
+        except Exception as e:
+            print(e)
         return round_id
 
     def get_orders_for_round(round_id):
