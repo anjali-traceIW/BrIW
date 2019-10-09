@@ -20,10 +20,12 @@
                 <button class="button">Rounds</button>
             </div>
         </div>
+        <br>
         
         <div class="row justify-content-center">
             <h1>Place an order</h1><br>
         </div>
+        <br>
         <form method="POST" id="order-form" action="/pages/order-example">
             <div class="row justify-content-center">
                 <div class="col-xs-2" align="right">
@@ -31,7 +33,13 @@
                     <label for="drink">Drink:</label> 
                 </div>
                 <div class="col-xs-3">
-                    <input type="text" id="person" name="person"><br>
+                    <!-- <input type="text" id="person" name="person"> -->
+                    <select id="person" name="person">
+                        {% for person in people %}
+                        <option value="{{person.name}}">{{person.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
                     <input type="text" id="drink" name="drink">
                 </div>
             </div>
@@ -70,5 +78,21 @@
             }
         }
         document.querySelector("#btn-submit").addEventListener("click", whenClicked);
+
+        function requestContent(method, url) {
+            // Get page content
+            let xhttp=new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Do something with the response
+                }
+            };
+            xhttp.open(method, url, true);
+            xhttp.send();
+        }
+
+        // Get people
+        requestContent("GET", "/people")
+
     </script>
 </body>

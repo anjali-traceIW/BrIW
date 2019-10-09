@@ -109,15 +109,18 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
         """
     return html_document
 
-@app.route("/pages/order-example", methods=["GET", "POST"])
-def person_form():
+@app.route("/pages/order", methods=["GET", "POST"])
+def order_form():
     if request.method == "GET":     # Return the entry form
-        return render_template("order_form.html", title="Place an order")
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("order_form.html", title="Place an order", people=people, drinks=drinks)
     elif request.method == "POST":  # Take user input, return the submitted form
         person_name = request.form.get("person")
         drink_name = request.form.get("drink")
 
-        # Do something wiht this information
+        # Do something with this information
+        RoundsDbManager.create_order_for_round(round_id, (person_name, drink_name))
 
         return render_template("order_submitted.html", title="Submitted", person=person_name, drink=drink_name)
 
