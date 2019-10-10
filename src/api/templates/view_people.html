@@ -8,7 +8,7 @@
    
     <!-- My CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
-    <title>Order</title>
+    <title>People</title>
 </head>
 <body>
     <div class="container-fluid">
@@ -23,92 +23,73 @@
         <br>
         
         <div class="row justify-content-center">
-            <h1>Round {{round.id}}</h1>
-        </div>
-        <div class="row justify-content-center">
-            Started by {{round.owner}} at {{round.time_started}}
+            <h1>All People</h1><br>
         </div>
         <br>
         <div class="row justify-content-center">
-            <h2>Orders: </h2>
-        </div>
-        <div class="row justify-content-center">
-
-            <table>
+            <table> 
                 <thead>
                     <tr>
-                        <th align="right">Person</th>
-                        <th>Drink</th>
+                        <th>Name</th>
+                        <th>Favourite Drink</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in round.orders.items() %}
+                    {% for person in people %}
                     <tr>
-                        <td align="right">{{order[0]}}</td>
-                        <td>{{order[1]}}</td>
+                        <td>{{person.name}}</td>
+                        <td>{{person.favourite_drink.name}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <br>
-
         {% if updated %}
         <div class="row justify-content-center">
-            <p style="color:green;">Successfully made an order.</p>
+            <p style="color:green;">Successfully made a new person.</p>
         </div>
         {% endif %}
-
-        <div class="row justify-content-center">
-            <h2>Place an order</h2><br>
-        </div>
-        <br>
-        
-        <form method="POST" id="order-form" action="/pages/order?round_id={{round.id}}">
+        <form method="POST" id="person-form" action="/pages/people">
             <div class="row justify-content-center">
-                <div class="col-xs-2" align="right">
-                    <label for="person">Person:</label></br>
-                    <label for="drink">Drink:</label> 
+                <h2>Add a new person</h2>
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-sm-2" align="right">
+                    <label for="name">name:</label><br>
+                    <label for="drink">favourite drink:</label>
                 </div>
-                <div class="col-xs-3">
-                    <select id="person" name="person" onchange="listDrinks">
-                        {% for person in people %}
-                        <option value="{{person.name}}">{{person.name}}</option>
-                        {% endfor %}
-                    </select>
-                    <br>
-                    <select id="drink" name="drink">
+                <div class="col-sm-3" align="left">
+                    <input id="name-input" type="text" name="name"><br>
+                    <select id="drink-input" name="drink">
                         {% for drink in drinks %}
                         <option value="{{drink.name}}">{{drink.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-            <br>
             <div class="row content-centre">
                 <input class="button" id="btn-submit" type="submit" value="Submit">
             </div>
             <div class="row justify-content-center">
-                <p id="invalid-text">Invalid person or drink supplied.</p>
-                <p id="empty-text">Cannot make an empty request.</p>
+                <p id="invalid-text">Invalid person name supplied.</p>
+                <p id="empty-text">Cannot make a person with no name.</p>
             </div>
         </form>
     </div>
 
     <script>
-        function whenClicked(ev) {
+        function makePerson(ev) {
             ev.preventDefault();
 
-            const personInput = document.getElementById("person")
-            const drinkInput = document.getElementById("drink")
-
+            const name = document.querySelector("#name-input").value
+            const drink = document.querySelector("#drink-input").value
             const letters = /([A-Za-z]*\s)*/
 
-            if (personInput.value != "" && personInput.value.match(letters)
-                && drinkInput.value != "" && drinkInput.value.match(letters)) {
-                const form = document.getElementById("order-form")
+            if (name != "" && name.match(letters)) {
+                const form = document.getElementById("person-form")
                 form.submit()
-            } else if (personInput.value == "" && drinkInput.value == "") {
+            } else if (name == "") {
                 // This is empty
                 document.querySelector("#invalid-text").style.display = "none"
                 document.querySelector("#empty-text").style.display = "block"
@@ -117,16 +98,11 @@
                 document.querySelector("#invalid-text").style.display = "block"
                 document.querySelector("#empty-text").style.display = "none"
             }
+
         }
-        document.querySelector("#btn-submit").addEventListener("click", whenClicked);
-
-        function listDrinks() {
-            person = document.querySelector("#person").value
-
-            // Show drinks selector
-
-            // Star next to selected person's favourite drink (which we should know!)
-        }
-
+        document.querySelector("#invalid-text").style.display = "none"
+        document.querySelector("#empty-text").style.display = "none"
+        
+        document.querySelector("#btn-submit").addEventListener("click", makePerson);
     </script>
 </body>

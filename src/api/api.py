@@ -88,7 +88,7 @@ def add_drink(DrinksDbManager=DrinksDbManager):
 
 # ============== PAGES ==============
 
-@app.route("/pages/drinks", methods=["GET"])
+@app.route("/pages/drinks-test", methods=["GET"])
 def get_drinks_html(DrinksDbManager=DrinksDbManager):
     drinks = DrinksDbManager.get_all_drinks()
     
@@ -109,17 +109,81 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
         """
     return html_document
 
-@app.route("/pages/order-example", methods=["GET", "POST"])
-def person_form():
+@app.route("/pages/nineties", methods=["GET"])
+def get_nineties():
+    return render_template("nineties.html")
+
+@app.route("/pages/people", methods=["GET", "POST"])
+def show_people():
+    if request.method == "GET":
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("view_people.html", title="View all people", people=people, drinks=drinks)
+    elif request.method == "POST":
+        new_person = Person(request.form.get("name"), Drink(request.form.get("drink")))
+        new_person_id = PeopleDbManager.create_person(new_person)
+
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("view_people.html", title="View all people", people=people, drinks=drinks, updated=True)
+
+@app.route("/pages/drinks", methods=["GET", "POST"])
+def handle_drinks():
+    if request.method == "GET":
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("view_drinks.html", title="View all drinks", drinks=drinks)
+    elif request.method == "POST":
+        new_drink = Drink(request.form.get("name"), request.form.get("temperature"))
+        print(new_drink.make_csv_line())
+        new_drink_id = DrinksDbManager.create_drink(new_drink)
+        print(new_drink_id)
+        
+        # Return fresh updated page
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("view_drinks.html", title="View all drinks", drinks=drinks, updated=True)
+
+@app.route("/pages/rounds", methods=["GET"])
+def show_rounds():
+    rounds = RoundsDbManager.get_all_rounds()
+    return render_template("view_rounds.html", title="View all rounds", rounds=rounds)
+
+@app.route("/pages/round", methods=["GET", "POST"])
+def make_round():
+    if request.method == "GET":
+        people = PeopleDbManager.get_all_people()
+        return render_template("make_round.html", title="Start a round", people=people)
+    elif request.method == "POST":
+        new_round = Round(request.form.get("owner"), datetime.now())
+        new_round_id = RoundsDbManager.create_round(new_round)
+        people = PeopleDbManager.get_all_people()
+        return render_template("make_round.html", title="Start a round", people=people, created=True)
+
+@app.route("/pages/order", methods=["GET", "POST"])
+def order_form():
+    round_id = request.args.get("round_id")
+    # print(round_id)
     if request.method == "GET":     # Return the entry form
-        return render_template("order_form.html", title="Place an order")
+        round = RoundsDbManager.get_round(round_id)
+        round.orders = RoundsDbManager.get_orders_for_round(round_id)
+
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+
+        return render_template("order_form.html", title="Place an order", people=people, drinks=drinks, round=round)
     elif request.method == "POST":  # Take user input, return the submitted form
         person_name = request.form.get("person")
         drink_name = request.form.get("drink")
 
-        # Do something wiht this information
+        # Do something with this information
+        RoundsDbManager.create_order_for_round(round_id, (person_name, drink_name))
 
-        return render_template("order_submitted.html", title="Submitted", person=person_name, drink=drink_name)
+        # Refresh orders and return updated page
+        round = RoundsDbManager.get_round(round_id)
+        round.orders = RoundsDbManager.get_orders_for_round(round_id)
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+
+        return render_template("order_form.html", title="Place an order", people=people, drinks=drinks, round=round, updated=True)
 
 if __name__ == "__main__":
     print("Starting server")

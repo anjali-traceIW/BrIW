@@ -1,0 +1,57 @@
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   
+    <!-- My CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+    <title>Start a Round</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 btn-group justify-content-center">
+                <button class="button">Home</button>
+                <a href="/pages/people"><button class="button">People</button></a>
+                <a href="/pages/drinks"><button class="button">Drinks</button></a>
+                <a href="/pages/rounds"><button class="button">Rounds</button></a>
+            </div>
+        </div>
+        <br>
+        
+        <div class="row justify-content-center">
+            <h1>Start a Round</h1><br>
+        </div>
+        <br>
+
+        <form method="POST" id="round-form" action="/pages/round">
+            <div class="row justify-content-center">
+                <div class="col-sm-2" align="right">
+                    <label for="owner">Brewer:</label><br>
+                    <label for="starting">starting:</label>
+                </div>
+                <div class="col-sm-3" align="left">
+                    <select id="owner" name="owner">
+                        {% for person in people %}
+                        <option value="{{person.name}}">{{person.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <p name="starting">NOW</p>
+                </div>
+            </div>
+            <div class="row content-centre">
+                <input class="button" id="btn-submit" type="submit" value="Submit">
+            </div>
+        </form>
+        {% if created %}
+        <div class="row justify-content-center">
+            <p style="color:green;">Successfully created round.</p>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+    </script>
+</body>
