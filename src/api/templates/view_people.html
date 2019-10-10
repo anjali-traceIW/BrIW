@@ -44,9 +44,65 @@
                 </tbody>
             </table>
         </div>
+        {% if updated %}
+        <div class="row justify-content-center">
+            <p style="color:green;">Successfully made a new person.</p>
+        </div>
+        {% endif %}
+        <form method="POST" id="person-form" action="/pages/people">
+            <div class="row justify-content-center">
+                <h2>Add a new person</h2>
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-sm-2" align="right">
+                    <label for="name">name:</label><br>
+                    <label for="drink">favourite drink:</label>
+                </div>
+                <div class="col-sm-3" align="left">
+                    <input id="name-input" type="text" name="name"><br>
+                    <select id="drink-input" name="drink">
+                        {% for drink in drinks %}
+                        <option value="{{drink.name}}">{{drink.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row content-centre">
+                <input class="button" id="btn-submit" type="submit" value="Submit">
+            </div>
+            <div class="row justify-content-center">
+                <p id="invalid-text">Invalid person name supplied.</p>
+                <p id="empty-text">Cannot make a person with no name.</p>
+            </div>
+        </form>
     </div>
 
     <script>
+        function makePerson(ev) {
+            ev.preventDefault();
 
+            const name = document.querySelector("#name-input").value
+            const drink = document.querySelector("#drink-input").value
+            const letters = /([A-Za-z]*\s)*/
+
+            if (name != "" && name.match(letters)) {
+                const form = document.getElementById("person-form")
+                form.submit()
+            } else if (name == "") {
+                // This is empty
+                document.querySelector("#invalid-text").style.display = "none"
+                document.querySelector("#empty-text").style.display = "block"
+            } else { 
+                // This is bad
+                document.querySelector("#invalid-text").style.display = "block"
+                document.querySelector("#empty-text").style.display = "none"
+            }
+
+        }
+        document.querySelector("#invalid-text").style.display = "none"
+        document.querySelector("#empty-text").style.display = "none"
+        
+        document.querySelector("#btn-submit").addEventListener("click", makePerson);
     </script>
 </body>

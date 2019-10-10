@@ -113,10 +113,19 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
 def get_nineties():
     return render_template("nineties.html")
 
-@app.route("/pages/people", methods=["GET"])
+@app.route("/pages/people", methods=["GET", "POST"])
 def show_people():
-    people = PeopleDbManager.get_all_people()
-    return render_template("view_people.html", title="View all people", people=people)
+    if request.method == "GET":
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("view_people.html", title="View all people", people=people, drinks=drinks)
+    elif request.method == "POST":
+        new_person = Person(request.form.get("name"), Drink(request.form.get("drink")))
+        new_person_id = PeopleDbManager.create_person(new_person)
+
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
+        return render_template("view_people.html", title="View all people", people=people, drinks=drinks, updated=True)
 
 @app.route("/pages/drinks", methods=["GET", "POST"])
 def handle_drinks():
