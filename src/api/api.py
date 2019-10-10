@@ -109,6 +109,10 @@ def get_drinks_html(DrinksDbManager=DrinksDbManager):
         """
     return html_document
 
+@app.route("/pages/nineties", methods=["GET"])
+def get_nineties():
+    return render_template("nineties.html")
+
 @app.route("/pages/people", methods=["GET"])
 def show_people():
     people = PeopleDbManager.get_all_people()

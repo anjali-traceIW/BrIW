@@ -48,7 +48,7 @@
         {% if updated %}
         <p style="color:green;">Successfully made a new drink.</p>
         {% endif %}
-        <form method="POST" id="drink-form" action="/pages/drinks?"+round_id>
+        <form method="POST" id="drink-form" action="/pages/drinks">
             <div class="row justify-content-center">
                 <h2>Add a new drink</h2>
             </div>
@@ -63,13 +63,45 @@
                     <select id="temperature-input" name="temperature">
                         <option value="Hot">Hot</option>
                         <option value="Iced">Iced</option>
-                        <option value="As Expected">As Expected</option>   // e.g. for wine. This will definitely become weird.
+                        <option value="As Expected">As Expected</option>    <!-- e.g. for wine. This will definitely become weird. -->
                     </select>
                 </div>
             </div>
+            <div class="row content-centre">
+                <input class="button" id="btn-submit" type="submit" value="Submit">
+            </div>
+            <div class="row justify-content-center">
+                <p id="invalid-text">Invalid drink name supplied.</p>
+                <p id="empty-text">Cannot make a drink with no name.</p>
+            </div>
         </form>
     </div>
-
     <script>
+        function makeDrink(ev) {
+            ev.preventDefault();
+
+            const name = document.querySelector("#name-input").value
+            const temperature = document.querySelector("#temperature-input").value
+            const letters = /([A-Za-z]*\s)*/
+
+            if (name != "" && name.match(letters)
+                && temperature != "" && temperature.match(letters)) {
+                const form = document.getElementById("drink-form")
+                form.submit()
+            } else if (name == "" && temperature == "") {
+                // This is empty
+                document.querySelector("#invalid-text").style.display = "none"
+                document.querySelector("#empty-text").style.display = "block"
+            } else { 
+                // This is bad
+                document.querySelector("#invalid-text").style.display = "block"
+                document.querySelector("#empty-text").style.display = "none"
+            }
+
+        }
+        document.querySelector("#invalid-text").style.display = "none"
+        document.querySelector("#empty-text").style.display = "none"
+        
+        document.querySelector("#btn-submit").addEventListener("click", makeDrink);
     </script>
 </body>
