@@ -138,6 +138,17 @@ def show_rounds():
     rounds = RoundsDbManager.get_all_rounds()
     return render_template("view_rounds.html", title="View all rounds", rounds=rounds)
 
+@app.route("/pages/round", methods=["GET", "POST"])
+def make_round():
+    if request.method == "GET":
+        people = PeopleDbManager.get_all_people()
+        return render_template("make_round.html", title="Start a round", people=people)
+    elif request.method == "POST":
+        new_round = Round(request.form.get("owner"), datetime.now())
+        new_round_id = RoundsDbManager.create_round(new_round)
+        people = PeopleDbManager.get_all_people()
+        return render_template("make_round.html", title="Start a round", people=people, created=True)
+
 @app.route("/pages/order", methods=["GET", "POST"])
 def order_form():
     round_id = request.args.get("round_id")
@@ -145,10 +156,9 @@ def order_form():
     if request.method == "GET":     # Return the entry form
         round = RoundsDbManager.get_round(round_id)
         round.orders = RoundsDbManager.get_orders_for_round(round_id)
+
         people = PeopleDbManager.get_all_people()
         drinks = DrinksDbManager.get_all_drinks()
-
-        print(round.orders)
 
         return render_template("order_form.html", title="Place an order", people=people, drinks=drinks, round=round)
     elif request.method == "POST":  # Take user input, return the submitted form
@@ -159,7 +169,10 @@ def order_form():
         RoundsDbManager.create_order_for_round(round_id, (person_name, drink_name))
 
         # Refresh orders and return updated page
+        round = RoundsDbManager.get_round(round_id)
         round.orders = RoundsDbManager.get_orders_for_round(round_id)
+        people = PeopleDbManager.get_all_people()
+        drinks = DrinksDbManager.get_all_drinks()
 
         return render_template("order_form.html", title="Place an order", people=people, drinks=drinks, round=round, updated=True)
 

@@ -148,10 +148,10 @@ class RoundsDbManager(DbManager):
         query = "SELECT person_name, drink_name FROM drinks JOIN (SELECT person_name, drink_id FROM people JOIN (SELECT person_id, drink_id FROM orders WHERE round_id = %s) AS order_info ON people.person_id=order_info.person_id) AS person_drink_id ON drinks.drink_id=person_drink_id.drink_id"
         try:
             results = DbManager.execute_select(query, (round_id))
+            for row in results:
+                orders[row[0]] = row[1]  # This is stupid?
         except Exception as e:
             print(e)
-        for row in results:
-            orders[row[0]] = row[1]  # This is stupid?
         return orders
 
     def create_order_for_round(round_id, order):

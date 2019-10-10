@@ -53,11 +53,18 @@
         </div>
         <br>
 
+        {% if updated %}
+        <div class="row justify-content-center">
+            <p style="color:green;">Successfully made an order.</p>
+        </div>
+        {% endif %}
+
         <div class="row justify-content-center">
             <h2>Place an order</h2><br>
         </div>
         <br>
-        <form method="POST" id="order-form" action="/pages/order?"+round_id>
+        
+        <form method="POST" id="order-form" action="/pages/order?round_id={{round.id}}">
             <div class="row justify-content-center">
                 <div class="col-xs-2" align="right">
                     <label for="person">Person:</label></br>
@@ -70,7 +77,6 @@
                         {% endfor %}
                     </select>
                     <br>
-                    <!-- <input type="text" id="drink" name="drink"> -->
                     <select id="drink" name="drink">
                         {% for drink in drinks %}
                         <option value="{{drink.name}}">{{drink.name}}</option>
