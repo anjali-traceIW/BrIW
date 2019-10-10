@@ -118,14 +118,16 @@ def show_people():
     people = PeopleDbManager.get_all_people()
     return render_template("view_people.html", title="View all people", people=people)
 
-@app.route("/pages/drinks", methods=["GET"])
+@app.route("/pages/drinks", methods=["GET", "POST"])
 def handle_drinks():
     if request.method == "GET":
         drinks = DrinksDbManager.get_all_drinks()
         return render_template("view_drinks.html", title="View all drinks", drinks=drinks)
     elif request.method == "POST":
         new_drink = Drink(request.form.get("name"), request.form.get("temperature"))
+        print(new_drink.make_csv_line())
         new_drink_id = DrinksDbManager.create_drink(new_drink)
+        print(new_drink_id)
         
         # Return fresh updated page
         drinks = DrinksDbManager.get_all_drinks()
@@ -156,7 +158,10 @@ def order_form():
         # Do something with this information
         RoundsDbManager.create_order_for_round(round_id, (person_name, drink_name))
 
-        return render_template("order_submitted.html", title="Submitted", person=person_name, drink=drink_name)
+        # Refresh orders and return updated page
+        round.orders = RoundsDbManager.get_orders_for_round(round_id)
+
+        return render_template("order_form.html", title="Place an order", people=people, drinks=drinks, round=round, updated=True)
 
 if __name__ == "__main__":
     print("Starting server")

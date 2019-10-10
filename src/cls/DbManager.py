@@ -75,10 +75,10 @@ class DrinksDbManager(DbManager):
     def get_all_drinks():
         drinks = []
         try:
-            results = DbManager.execute_select("SELECT drink_name FROM drinks")
+            results = DbManager.execute_select("SELECT drink_name, temperature FROM drinks")
             for row in results:
                 print(row)
-                drinks.append(Drink(row[0]))
+                drinks.append(Drink(row[0], temp=row[1]))
         except Exception as e:
             # TODO: improve this sad message
             print("Something went wrong getting all drinks from the database...")
@@ -88,17 +88,17 @@ class DrinksDbManager(DbManager):
     def get_drink(drink_id):
         drink = Drink("")
         try: 
-            result = DbManager.execute_select("SELECT drink_name FROM drinks WHERE drink_id=%s", (drink_id))[0]     # Only one result to be returned.
-            drink = Drink(result[0])
+            result = DbManager.execute_select("SELECT drink_name, temperature FROM drinks WHERE drink_id=%s", (drink_id))[0]     # Only one result to be returned.
+            drink = Drink(result[0], result[1])
         except Exception as e:
             print(e)
         return drink
 
     def create_drink(drink):
         new_drink_id = -1
-        query = "INSERT INTO drinks (drink_name) VALUES (%s)"
+        query = "INSERT INTO drinks (drink_name, temperature) VALUES (%s, %s)"
         try: 
-            new_drink_id = DbManager.execute_update_or_insert(query, (drink.name))
+            new_drink_id = DbManager.execute_update_or_insert(query, (drink.name, drink.temperature))
         except Exception as e:
             print(e)
         return new_drink_id
